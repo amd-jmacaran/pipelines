@@ -1,0 +1,25 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- develop
+
+pool: NV31
+
+steps:
+- script: echo "rocm" | sudo -S apt install -y rocm-cmake python3-pip rocblas miopen-hip
+  displayName: 'Installing dependencies'
+
+- script: echo "rocm" | sudo -S pip3 install https://github.com/RadeonOpenCompute/rbuild/archive/master.tar.gz
+  displayName: 'Installing rbuild'
+
+- script: rbuild build -d depend -B build -DGPU_TARGETS=$(/opt/rocm/bin/rocminfo -T check| grep -o -m1 'gfx.*')
+  displayName: 'Building MIGRAPHX and Test suite'
+
+- script: ./build/bin/./test_verify
+  displayName: 'Running Test suite'
+  
+  
+  
