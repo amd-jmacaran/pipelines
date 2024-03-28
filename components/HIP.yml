@@ -1,0 +1,41 @@
+# hip and clr are tightly-coupled
+# run this same template for both repos
+# any changes for clr should just trigger HIP pipeline
+jobs:
+- job: hip
+  pool: gfx1100
+  workspace:
+    clean: all
+  steps:
+  - template: /templates/steps/checkout.yml
+  - template: /templates/steps/checkout.yml
+    parameters:
+      checkoutRepo: clr_repo
+  - template: /templates/steps/checkout.yml
+    parameters:
+      checkoutRepo: hipcc_repo
+# ${{ }} are resolved during compile-time
+# so this next step is skipped completely until
+# we define explicit aptPackages needed to install
+  - ${{ if parameters.aptPackages }}:
+    - template: /templates/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+# compile hipcc
+  - template: /templates/steps/build-cmake.yml
+    parameters:
+      componentName: hipcc
+      cmakeBuildDir: 'HIPCC/build'
+  - template: /templates/steps/build-cmake.yml
+    parameters:
+      componentName: hip
+      cmakeBuildDir: 'clr/build'
+      extraBuildFlags: >-
+        -DHIP_COMMON_DIR="$(Build.SourcesDirectory)/HIP"
+        -DHIP_PLATFORM=amd
+        -DCMAKE_PREFIX_PATH="/opt/rocm"
+        -DHIPCC_BIN_DIR="$(Build.SourcesDirectory)/HIPCC/build"
+        -DHIP_CATCH_TEST=1
+        -DCLR_BUILD_HIP=ON
+        -DCLR_BUILD_OCL=OFF
+#  - template: /templates/steps/publish.yml

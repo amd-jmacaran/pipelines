@@ -1,0 +1,17 @@
+jobs:
+- job: ROCT_Thunk_Interface
+  pool: NV31
+  workspace:
+    clean: all
+  steps:
+  - template: /templates/steps/preamble.yml
+  - template: /templates/steps/checkout.yml
+# ${{ }} are resolved during compile-time
+# so this next step is skipped completely until
+# we define explicit aptPackages needed to install
+  - ${{ if parameters.aptPackages }}:
+    - template: /templates/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+  - template: /templates/steps/build-cmake.yml
+  - template: /templates/steps/publish.yml

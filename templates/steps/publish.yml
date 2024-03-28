@@ -1,0 +1,6 @@
+steps:
+- task: PublishBuildArtifacts@1
+  retryCountOnTaskFailure: 3
+  inputs:
+      StoreAsTar: true
+

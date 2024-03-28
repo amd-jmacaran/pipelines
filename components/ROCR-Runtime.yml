@@ -1,0 +1,26 @@
+parameters:
+- name: aptPackages
+  type: string
+  default: 'libelf-dev g++'
+
+jobs:
+- job: rocr_runtime
+  pool: NV31
+  workspace:
+    clean: all
+  steps:
+  - template: /templates/steps/preamble.yml
+  - template: /templates/steps/checkout.yml
+# ${{ }} are resolved during compile-time
+# so this next step is run because
+# we define explicit aptPackages needed to install
+  - ${{ if parameters.aptPackages }}:
+    - template: /templates/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+  - template: /templates/steps/build-cmake.yml
+    parameters:
+      extraBuildFlags: >-
+        -DCMAKE_INSTALL_PREFIX=/opt/rocm
+      cmakeBuildDir: 'src/build'
+  - template: /templates/steps/publish.yml

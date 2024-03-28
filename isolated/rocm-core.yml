@@ -1,0 +1,36 @@
+jobs:
+- job: build_rocm_core
+  workspace:
+    clean: all
+  steps:
+  - checkout: rocm-core_repo
+    clean: true
+    fetchTags: false
+    fetchDepth: 1
+  - task: CMake@1
+    displayName: 'CMake Flags'
+    inputs:
+      cmakeArgs: >-
+        -DCMAKE_CURRENT_BINARY_DIR=$PWD
+        -DCMAKE_CURRENT_SOURCE_DIR=$PWD/../
+        -DCMAKE_VERBOSE_MAKEFILE=1
+        -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory)
+        -DCPACK_GENERATOR=DEB
+        -DCPACK_DEBIAN_PACKAGE_RELEASE="local.9999~24.10"
+        -DCPACK_RPM_PACKAGE_RELEASE="local.9999"
+        -DROCM_VERSION="6.0.0"
+        ..
+  - task: Bash@3
+    displayName: 'Build'
+    inputs:
+      targetType: 'inline'
+      script: 'cd build; make'
+  - task: Bash@3
+    displayName: 'Install'
+    inputs:
+      targetType: 'inline'
+      script: 'cd build; make install'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: rocm-core_install

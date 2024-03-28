@@ -1,0 +1,47 @@
+resources:
+  pipelines:
+  - pipeline: rocm-cmake
+    source: rocm-cmake
+    branch: develop
+  - pipeline: rocm-core
+    source: rocm-core
+    branch: master
+  - pipeline: ROCT-Thunk-Interface
+    source: ROCT-Thunk-Interface
+    branch: master
+
+schedules:
+- cron: '6 0 * * *'
+  displayName: nightly build
+  branches:
+    include:
+    - main
+
+trigger: none
+
+pool: NV31
+
+steps:
+# download tasks has built in 4x retry download count
+# these will download last passing build for that branch
+- task: DownloadBuildArtifacts@1
+  inputs:
+    buildType: 'specific'
+    project: ROCmPOCm
+    pipeline: rocm-cmake
+    specificBuildWithTriggering: true
+    branchName: develop
+- task: DownloadBuildArtifacts@1
+  inputs:
+    buildType: 'specific'
+    project: ROCmPOCm
+    pipeline: rocm-core
+    specificBuildWithTriggering: true
+    branchName: master
+- task: DownloadBuildArtifacts@1
+  inputs:
+    buildType: 'specific'
+    project: ROCmPOCm
+    pipeline: ROCT-Thunk-Interface
+    specificBuildWithTriggering: true
+    branchName: master

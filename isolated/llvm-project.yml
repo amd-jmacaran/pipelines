@@ -1,0 +1,43 @@
+jobs:
+- job: build_amd_llvm
+  workspace:
+    clean: all
+  steps:
+  - checkout: llvm-project_repo
+    clean: true
+    fetchTags: false
+    fetchDepth: 1
+  - task: CMake@1
+    displayName: 'CMake Flags'
+    inputs:
+      runInsideShell: true
+      workingDirectory: llvm/build
+      cmakeArgs: >-
+        -DCMAKE_PREFIX_PATH="$(Build.ArtifactStagingDirectory)/llvm;$(Build.ArtifactStagingDirectory)"
+        -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory)
+        -DCPACK_PACKAGING_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory)
+        -DAMDGPU_TARGETS="gfx1100"
+        -GNinja
+        -DLLVM_TARGETS_TO_BUILD="AMDGPU;X86"
+        -DROCM_MAJOR_VERSION=6
+        -DROCM_MINOR_VERSION=0
+        -DROCM_PATCH_VERSION=0
+        -DROCM_VERSION="6.0.0"
+        ..
+  - task: CMake@1
+    retryCountOnTaskFailure: 10
+    displayName: 'Build'
+    inputs:
+      runInsideShell: true
+      workingDirectory: llvm/build
+      cmakeArgs: '--build . -j 4'
+  - task: CMake@1
+    displayName: 'Install'
+    inputs:
+      workingDirectory: llvm/build
+      cmakeArgs: '--build . --target install'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: llvm-project_install

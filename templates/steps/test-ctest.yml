@@ -1,0 +1,21 @@
+parameters:
+- name: componentName
+  type: string
+  default: ''
+
+steps:
+# run test, continue on failure to publish results
+# and to publish build artifacts
+- task: Bash@3
+  displayName: '${{parameters.componentName }} Test'
+  continueOnError: true
+  inputs:
+    targetType: inline
+    script: ctest --output-on-failure --output-junit test_output.xml
+    workingDirectory: build
+- task: PublishTestResults@2
+  displayName: 'Results'
+  inputs:
+    testResultsFormat: 'junit'
+    testResultsFiles: '**/test_output.xml'
+  condition: succeededOrFailed()

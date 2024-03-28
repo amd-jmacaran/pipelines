@@ -1,0 +1,27 @@
+jobs:
+- job: build_rocm_cmake
+  workspace:
+    clean: all
+  steps:
+  - checkout: rocm-cmake_repo
+    clean: true
+    fetchTags: false
+    fetchDepth: 1
+  - task: CMake@1
+    displayName: 'CMake Flags'
+    inputs:
+      cmakeArgs: >-
+        -DCMAKE_INSTALL_PREFIX=$(Build.ArtifactStagingDirectory)
+         ..
+  - task: CMake@1
+    displayName: 'Build'
+    inputs:
+      cmakeArgs: '--build .'
+  - task: CMake@1
+    displayName: 'Install'
+    inputs:
+      cmakeArgs: '--build . --target install'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: rocm-cmake_install

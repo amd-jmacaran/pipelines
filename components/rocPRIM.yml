@@ -1,0 +1,25 @@
+jobs:
+- job: rocprim
+  pool: NV31
+  workspace:
+    clean: all
+  steps:
+  - template: /templates/steps/preamble.yml
+  - template: /templates/steps/checkout.yml
+# ${{ }} are resolved during compile-time
+# so this next step is skipped completely until
+# we define explicit aptPackages needed to install
+  - ${{ if parameters.aptPackages }}:
+    - template: /templates/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+  - template: /templates/steps/build-cmake.yml
+    parameters:
+      extraBuildFlags: >-
+        -DBUILD_BENCHMARK=ON
+        -DCMAKE_CXX_COMPILER=hipcc
+        -DAMDGPU_TARGETS=gfx1100
+        -DAMDGPU_TARGETS=gfx1100
+        -GNinja
+  - script: 'ctest --output-on-failure'
+  - template: /templates/steps/publish.yml
