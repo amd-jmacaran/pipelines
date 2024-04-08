@@ -3,7 +3,7 @@ variables:
 
 trigger: none
 
-pool: gfx11
+pool: gfx1100
 
 steps:
 - script: echo '$(CCACHE_DIR)'
