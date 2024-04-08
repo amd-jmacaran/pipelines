@@ -1,0 +1,9 @@
+variables:
+- group: common
+
+trigger: none
+
+pool: gfx11
+
+steps:
+- script: echo '$(CCACHE_DIR)'

@@ -38,4 +38,4 @@ jobs:
         -DHIP_CATCH_TEST=1
         -DCLR_BUILD_HIP=ON
         -DCLR_BUILD_OCL=OFF
-#  - template: /templates/steps/publish.yml
+  - template: /templates/steps/publish.yml
