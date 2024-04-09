@@ -16,9 +16,14 @@ steps:
   inputs:
     targetType: inline
     script: sudo apt-get update
+- task: Bash@3
+  displayName: 'sudo apt-get fix'
+  inputs:
+    targetType: inline
+    script: sudo apt --yes --fix-broken install
 - ${{ if parameters.aptPackages }}:
   - task: Bash@3
     displayName: 'sudo apt-get install ...'
     inputs:
       targetType: inline
-      script: sudo apt-get --yes --force-yes install ${{ parameters.aptPackages }}
+      script: sudo apt-get --yes install ${{ parameters.aptPackages }}

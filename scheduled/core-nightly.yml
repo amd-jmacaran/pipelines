@@ -1,11 +1,8 @@
 resources:
   pipelines:
-  - pipeline: rocm-cmake
-    source: rocm-cmake
-    branch: develop
-  - pipeline: rocm-core
-    source: rocm-core
-    branch: master
+  - pipeline: llvm-project
+    source: llvm-project
+    branch: amd-staging
   - pipeline: ROCT-Thunk-Interface
     source: ROCT-Thunk-Interface
     branch: master
@@ -19,7 +16,7 @@ schedules:
 
 trigger: none
 
-pool: NV31
+pool: gfx1100
 
 steps:
 # download tasks has built in 4x retry download count
@@ -28,16 +25,10 @@ steps:
   inputs:
     buildType: 'specific'
     project: ROCmPOCm
-    pipeline: rocm-cmake
+    pipeline: llvm-project
     specificBuildWithTriggering: true
-    branchName: develop
-- task: DownloadBuildArtifacts@1
-  inputs:
-    buildType: 'specific'
-    project: ROCmPOCm
-    pipeline: rocm-core
-    specificBuildWithTriggering: true
-    branchName: master
+    branchName: amd-staging
+    extractTars: true
 - task: DownloadBuildArtifacts@1
   inputs:
     buildType: 'specific'
@@ -45,3 +36,6 @@ steps:
     pipeline: ROCT-Thunk-Interface
     specificBuildWithTriggering: true
     branchName: master
+    extractTars: true
+- script: 'ls -1R $(System.ArtifactsDirectory)'
+  displayName: 'Artifact listing'

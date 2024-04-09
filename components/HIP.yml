@@ -21,19 +21,53 @@ jobs:
     - template: /templates/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
+# download tasks has built in 4x retry download count
+# these will download last passing build for that branch
+  - task: DownloadBuildArtifacts@1
+    displayName: Download latest llvm
+    inputs:
+      buildType: 'specific'
+      project: ROCmPOCm
+      pipeline: llvm-project
+      specificBuildWithTriggering: true
+      branchName: amd-staging
+      extractTars: true
+  - task: DownloadBuildArtifacts@1
+    displayName: Download latest ROCT-Thunk-Interface
+    inputs:
+      buildType: 'specific'
+      project: ROCmPOCm
+      pipeline: ROCT-Thunk-Interface
+      specificBuildWithTriggering: true
+      branchName: master
+      extractTars: true
+  - task: DownloadBuildArtifacts@1
+    displayName: Download latest ROCR-Runtime
+    inputs:
+      buildType: 'specific'
+      project: ROCmPOCm
+      pipeline: ROCR-Runtime
+      specificBuildWithTriggering: true
+      branchName: master
+      extractTars: true
+  - script: 'ls -1R $(System.ArtifactsDirectory)/extracted_tars/drop'
+    displayName: 'Artifact listing'
 # compile hipcc
   - template: /templates/steps/build-cmake.yml
     parameters:
       componentName: hipcc
       cmakeBuildDir: 'HIPCC/build'
+# compile clr
   - template: /templates/steps/build-cmake.yml
     parameters:
-      componentName: hip
+      componentName: clr
       cmakeBuildDir: 'clr/build'
+      installDir: '$(Build.ArtifactStagingDirectory)/hip'
       extraBuildFlags: >-
         -DHIP_COMMON_DIR="$(Build.SourcesDirectory)/HIP"
         -DHIP_PLATFORM=amd
-        -DCMAKE_PREFIX_PATH="/opt/rocm"
+        -DCMAKE_PREFIX_PATH="$(System.ArtifactsDirectory)/extracted_tars/drop"
+        -DROCM_PATH="$(System.ArtifactsDirectory)/extracted_tars/drop"
         -DHIPCC_BIN_DIR="$(Build.SourcesDirectory)/HIPCC/build"
         -DHIP_CATCH_TEST=1
         -DCLR_BUILD_HIP=ON
