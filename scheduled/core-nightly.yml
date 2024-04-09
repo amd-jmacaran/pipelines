@@ -10,68 +10,36 @@ trigger: none
 pool: gfx1100
 
 steps:
-# download tasks has built in 4x retry download count
-# these will download last passing build for that branch
-- task: DownloadBuildArtifacts@1
-  displayName: Download latest rocm-cmake
-  inputs:
-    buildType: 'specific'
-    project: ROCmPOCm
-    pipeline: rocm-cmake
-    specificBuildWithTriggering: true
+- template: /templates/steps/artifact-download.yml
+  parameters:
+    componentName: rocm-cmake
     branchName: develop
-    extractTars: true
-- task: DownloadBuildArtifacts@1
-  displayName: Download latest rocm-core
-  inputs:
-    buildType: 'specific'
-    project: ROCmPOCm
-    pipeline: rocm-core
-    specificBuildWithTriggering: true
+- template: /templates/steps/artifact-download.yml
+  parameters:
+    componentName: rocm-core
     branchName: master
-    extractTars: true
-- task: DownloadBuildArtifacts@1
-  displayName: Download latest ROCT-Thunk-Interface
-  inputs:
-    buildType: 'specific'
-    project: ROCmPOCm
-    pipeline: ROCT-Thunk-Interface
-    specificBuildWithTriggering: true
+- template: /templates/steps/artifact-download.yml
+  parameters:
+    componentName: ROCT-Thunk-Interface
     branchName: master
-    extractTars: true
-- task: DownloadBuildArtifacts@1
-  displayName: Download latest llvm-project
-  inputs:
-    buildType: 'specific'
-    project: ROCmPOCm
-    pipeline: llvm-project
-    specificBuildWithTriggering: true
+- template: /templates/steps/artifact-download.yml
+  parameters:
+    componentName: llvm-project
     branchName: amd-staging
-    extractTars: true
-- task: DownloadBuildArtifacts@1
-  displayName: Download latest ROCR-Runtime
-  inputs:
-    buildType: 'specific'
-    project: ROCmPOCm
-    pipeline: ROCR-Runtime
-    specificBuildWithTriggering: true
+- template: /templates/steps/artifact-download.yml
+  parameters:
+    componentName: ROCR-Runtime
     branchName: master
-    extractTars: true
-- task: DownloadBuildArtifacts@1
-  displayName: Download latest HIP
-  inputs:
-    buildType: 'specific'
-    project: ROCmPOCm
-    pipeline: clr
-    specificBuildWithTriggering: true
+- template: /templates/steps/artifact-download.yml
+  parameters:
+    componentName: clr
     branchName: rocm-6.0.x
-    extractTars: true
-- script: 'ls -1R $(System.ArtifactsDirectory)'
+- script: 'ls -1R $(Agent.BuildDirectory)/rocm'
   displayName: 'Artifact listing'
 - task: CopyFiles@2
   displayName: 'Prepare for packaging'
   inputs:
-    SourceFolder: $(System.ArtifactsDirectory)/extracted_tars/drop
-    TargetFolder: $(Build.ArtifactStagingDirectory)
+    SourceFolder: $(Agent.BuildDirectory)/rocm
+    TargetFolder: $(Build.BinariesDirectory)
     retryCount: 3
-- template: /templates/steps/publish.yml
+- template: /templates/steps/artifact-upload.yml

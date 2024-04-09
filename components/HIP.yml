@@ -23,34 +23,19 @@ jobs:
         aptPackages: ${{ parameters.aptPackages }}
 # download tasks has built in 4x retry download count
 # these will download last passing build for that branch
-  - task: DownloadBuildArtifacts@1
-    displayName: Download latest llvm
-    inputs:
-      buildType: 'specific'
-      project: ROCmPOCm
-      pipeline: llvm-project
-      specificBuildWithTriggering: true
+  - template: /templates/steps/artifact-download.yml
+    parameters:
+      componentName: llvm-project
       branchName: amd-staging
-      extractTars: true
-  - task: DownloadBuildArtifacts@1
-    displayName: Download latest ROCT-Thunk-Interface
-    inputs:
-      buildType: 'specific'
-      project: ROCmPOCm
-      pipeline: ROCT-Thunk-Interface
-      specificBuildWithTriggering: true
+  - template: /templates/steps/artifact-download.yml
+    parameters:
+      componentName: ROCT-Thunk-Interface
       branchName: master
-      extractTars: true
-  - task: DownloadBuildArtifacts@1
-    displayName: Download latest ROCR-Runtime
-    inputs:
-      buildType: 'specific'
-      project: ROCmPOCm
-      pipeline: ROCR-Runtime
-      specificBuildWithTriggering: true
+  - template: /templates/steps/artifact-download.yml
+    parameters:
+      componentName: ROCR-Runtime
       branchName: master
-      extractTars: true
-  - script: 'ls -1R $(System.ArtifactsDirectory)/extracted_tars/drop'
+  - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
     displayName: 'Artifact listing'
 # compile hipcc
   - template: /templates/steps/build-cmake.yml
@@ -62,14 +47,14 @@ jobs:
     parameters:
       componentName: clr
       cmakeBuildDir: 'clr/build'
-      installDir: '$(Build.ArtifactStagingDirectory)/hip'
+      installDir: '$(Build.BinariesDirectory)/hip'
       extraBuildFlags: >-
         -DHIP_COMMON_DIR="$(Build.SourcesDirectory)/HIP"
         -DHIP_PLATFORM=amd
-        -DCMAKE_PREFIX_PATH="$(System.ArtifactsDirectory)/extracted_tars/drop"
-        -DROCM_PATH="$(System.ArtifactsDirectory)/extracted_tars/drop"
+        -DCMAKE_PREFIX_PATH="$(Agent.BuildDirectory)/rocm"
+        -DROCM_PATH="$(Agent.BuildDirectory)/rocm"
         -DHIPCC_BIN_DIR="$(Build.SourcesDirectory)/HIPCC/build"
         -DHIP_CATCH_TEST=1
         -DCLR_BUILD_HIP=ON
         -DCLR_BUILD_OCL=OFF
-  - template: /templates/steps/publish.yml
+  - template: /templates/steps/artifact-upload.yml

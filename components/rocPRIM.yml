@@ -22,4 +22,4 @@ jobs:
         -DAMDGPU_TARGETS=gfx1100
         -GNinja
   - script: 'ctest --output-on-failure'
-  - template: /templates/steps/publish.yml
+  - template: /templates/steps/artifact-upload.yml

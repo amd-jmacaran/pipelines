@@ -19,7 +19,7 @@ jobs:
     parameters:
       componentName: rocm-llvm
       extraBuildFlags: >-
-        -DCMAKE_PREFIX_PATH="$(Build.ArtifactStagingDirectory)/llvm;$(Build.ArtifactStagingDirectory)"
+        -DCMAKE_PREFIX_PATH="$(Build.BinariesDirectory)/llvm;$(Build.BinariesDirectory)"
         -DCMAKE_BUILD_TYPE=Release
         -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra"
         -DLLVM_ENABLE_RUNTIMES="compiler-rt;libunwind"
@@ -28,7 +28,7 @@ jobs:
         -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
         -GNinja
       cmakeBuildDir: 'llvm/build'
-      installDir: '$(Build.ArtifactStagingDirectory)/llvm'
+      installDir: '$(Build.BinariesDirectory)/llvm'
   - template: /templates/steps/build-cmake.yml
     parameters:
       componentName: device-libs
@@ -54,4 +54,4 @@ jobs:
 #        -DCMAKE_BUILD_TYPE=Release
 #        -GNinja
 #      cmakeBuildDir: 'amd/hipcc/build'
-  - template: /templates/steps/publish.yml
+  - template: /templates/steps/artifact-upload.yml

@@ -1,0 +1,16 @@
+steps:
+# compress build products into tarball
+# delete build products after compression
+- task: ArchiveFiles@2
+  inputs:
+    includeRootFolder: false
+    archiveType: 'tar'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tar.gz'
+- task: DeleteFiles@1
+  inputs:
+    SourceFolder: '$(Build.BinariesDirectory)'
+    Contents: '/**/*'
+    RemoveDotFiles: true
+# then publish it
+- task: PublishBuildArtifacts@1
+  retryCountOnTaskFailure: 3

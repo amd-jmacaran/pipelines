@@ -14,4 +14,4 @@ jobs:
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
   - template: /templates/steps/build-cmake.yml
-  - template: /templates/steps/publish.yml
+  - template: /templates/steps/artifact-upload.yml

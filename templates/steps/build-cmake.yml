@@ -16,7 +16,7 @@ parameters:
   default: '.'
 - name: installDir
   type: string
-  default: '$(Build.ArtifactStagingDirectory)'
+  default: '$(Build.BinariesDirectory)'
 
 steps:
 # create workingDirectory if it does not exist and change into it

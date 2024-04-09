@@ -18,31 +18,19 @@ jobs:
     - template: /templates/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
-# download tasks has built in 4x retry download count
-# these will download last passing build for that branch
-  - task: DownloadBuildArtifacts@1
-    displayName: Download latest llvm
-    inputs:
-      buildType: 'specific'
-      project: ROCmPOCm
-      pipeline: llvm-project
-      specificBuildWithTriggering: true
+  - template: /templates/steps/artifact-download.yml
+    parameters:
+      componentName: llvm-project
       branchName: amd-staging
-      extractTars: true
-  - task: DownloadBuildArtifacts@1
-    displayName: Download latest ROCT-Thunk-Interface
-    inputs:
-      buildType: 'specific'
-      project: ROCmPOCm
-      pipeline: ROCT-Thunk-Interface
-      specificBuildWithTriggering: true
+  - template: /templates/steps/artifact-download.yml
+    parameters:
+      componentName: ROCT-Thunk-Interface
       branchName: master
-      extractTars: true
-  - script: 'ls -1R $(System.ArtifactsDirectory)/extracted_tars/drop'
+  - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
     displayName: 'Artifact listing'
   - template: /templates/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
-        -DCMAKE_PREFIX_PATH="$(System.ArtifactsDirectory)/extracted_tars/drop"
+        -DCMAKE_PREFIX_PATH="$(Agent.BuildDirectory)/rocm"
       cmakeBuildDir: 'src/build'
-  - template: /templates/steps/publish.yml
+  - template: /templates/steps/artifact-upload.yml

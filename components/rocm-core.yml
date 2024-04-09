@@ -23,4 +23,4 @@ jobs:
         -DCPACK_DEBIAN_PACKAGE_RELEASE="local.9999~24.10"
         -DCPACK_RPM_PACKAGE_RELEASE="local.9999"
         -DROCM_VERSION="6.0.0"
-  - template: /templates/steps/publish.yml
+  - template: /templates/steps/artifact-upload.yml
