@@ -1,12 +1,3 @@
-resources:
-  pipelines:
-  - pipeline: llvm-project
-    source: llvm-project
-    branch: amd-staging
-  - pipeline: ROCT-Thunk-Interface
-    source: ROCT-Thunk-Interface
-    branch: master
-
 schedules:
 - cron: '6 0 * * *'
   displayName: nightly build
@@ -22,6 +13,34 @@ steps:
 # download tasks has built in 4x retry download count
 # these will download last passing build for that branch
 - task: DownloadBuildArtifacts@1
+  displayName: Download latest rocm-cmake
+  inputs:
+    buildType: 'specific'
+    project: ROCmPOCm
+    pipeline: rocm-cmake
+    specificBuildWithTriggering: true
+    branchName: develop
+    extractTars: true
+- task: DownloadBuildArtifacts@1
+  displayName: Download latest rocm-core
+  inputs:
+    buildType: 'specific'
+    project: ROCmPOCm
+    pipeline: rocm-core
+    specificBuildWithTriggering: true
+    branchName: master
+    extractTars: true
+- task: DownloadBuildArtifacts@1
+  displayName: Download latest ROCT-Thunk-Interface
+  inputs:
+    buildType: 'specific'
+    project: ROCmPOCm
+    pipeline: ROCT-Thunk-Interface
+    specificBuildWithTriggering: true
+    branchName: master
+    extractTars: true
+- task: DownloadBuildArtifacts@1
+  displayName: Download latest llvm-project
   inputs:
     buildType: 'specific'
     project: ROCmPOCm
@@ -30,12 +49,29 @@ steps:
     branchName: amd-staging
     extractTars: true
 - task: DownloadBuildArtifacts@1
+  displayName: Download latest ROCR-Runtime
   inputs:
     buildType: 'specific'
     project: ROCmPOCm
-    pipeline: ROCT-Thunk-Interface
+    pipeline: ROCR-Runtime
     specificBuildWithTriggering: true
     branchName: master
     extractTars: true
+- task: DownloadBuildArtifacts@1
+  displayName: Download latest HIP
+  inputs:
+    buildType: 'specific'
+    project: ROCmPOCm
+    pipeline: clr
+    specificBuildWithTriggering: true
+    branchName: rocm-6.0.x
+    extractTars: true
 - script: 'ls -1R $(System.ArtifactsDirectory)'
   displayName: 'Artifact listing'
+- task: CopyFiles@2
+  displayName: 'Prepare for packaging'
+  inputs:
+    SourceFolder: $(System.ArtifactsDirectory)/extracted_tars/drop
+    TargetFolder: $(Build.ArtifactStagingDirectory)
+    retryCount: 3
+- template: /templates/steps/publish.yml
