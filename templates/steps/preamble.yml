@@ -19,3 +19,9 @@ steps:
     script: python3 --version
 - script: pip list
   displayName: 'list python packages'
+- task: DeleteFiles@1
+  displayName: 'Cleanup Staging Area'
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: '/**/*'
+    RemoveDotFiles: true
