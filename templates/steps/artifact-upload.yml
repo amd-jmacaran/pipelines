@@ -1,16 +1,27 @@
-steps:
 # compress build products into tarball
 # delete build products after compression
+parameters:
+- name: artifactName # REQUIRED PARAMETER
+  type: string
+  default: 'drop'
+
+steps:
 - task: ArchiveFiles@2
+  displayName: '${{ parameters.artifactName }} Compress'
   inputs:
     includeRootFolder: false
     archiveType: 'tar'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tar.gz'
+    tarCompression: 'xz'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-${{ parameters.artifactName }}.tar.xz'
 - task: DeleteFiles@1
+  displayName: 'Cleanup Staging Area'
   inputs:
     SourceFolder: '$(Build.BinariesDirectory)'
     Contents: '/**/*'
     RemoveDotFiles: true
 # then publish it
 - task: PublishBuildArtifacts@1
+  displayName: '${{ parameters.artifactName }} Publish'
   retryCountOnTaskFailure: 3
+  inputs:
+    ArtifactName: '${{ parameters.artifactName }}'

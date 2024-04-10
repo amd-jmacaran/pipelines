@@ -1,6 +1,6 @@
 jobs:
 - job: rocm_core
-  pool: NV31
+  pool: gfx1100
   workspace:
     clean: all
   steps:

@@ -36,10 +36,72 @@ steps:
     branchName: rocm-6.0.x
 - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
   displayName: 'Artifact listing'
-- task: CopyFiles@2
-  displayName: 'Prepare for packaging'
-  inputs:
-    SourceFolder: $(Agent.BuildDirectory)/rocm
-    TargetFolder: $(Build.BinariesDirectory)
-    retryCount: 3
+# upload everything bundled together
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: $(Agent.BuildDirectory)/rocm
 - template: /templates/steps/artifact-upload.yml
+# upload partial amdgpu compiler components
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: $(Agent.BuildDirectory)/rocm
+    contentsString: |
+      $(Agent.BuildDirectory)/rocm/amdgcn/*
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: $(Agent.BuildDirectory)/rocm/llvm
+    clean: false
+    contentsString: |
+      $(Agent.BuildDirectory)/rocm/llvm/bin/amdgpu*
+      $(Agent.BuildDirectory)/rocm/llvm/bin/clang*
+      $(Agent.BuildDirectory)/rocm/llvm/bin/*lld*
+      $(Agent.BuildDirectory)/rocm/llvm/bin/offload-arch*
+- template: /templates/steps/artifact-upload.yml
+  parameters:
+    artifactName: amdgpu_compiler
+# upload amdgpu runtime
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: $(Agent.BuildDirectory)/rocm/hip
+    contentsString: |
+      $(Agent.BuildDirectory)/rocm/hip/lib/*.so
+      $(Agent.BuildDirectory)/rocm/hip/lib/*.so.*
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: $(Agent.BuildDirectory)/rocm
+    clean: false
+    contentsString: |
+      $(Agent.BuildDirectory)/rocm/lib/*.so
+      $(Agent.BuildDirectory)/rocm/lib/*.so.*
+      $(Agent.BuildDirectory)/rocm/lib/libhsakmt*
+- template: /templates/steps/artifact-upload.yml
+  parameters:
+    artifactName: amdgpu_runtime
+# upload amdgpu runtime dev
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: '$(Agent.BuildDirectory)/rocm/hip'
+    contentsString: |
+      $(Agent.BuildDirectory)/rocm/hip/include/*
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: '$(Agent.BuildDirectory)/rocm'
+    clean: false
+    contentsString: |
+      $(Agent.BuildDirectory)/rocm/include/hsa/*
+      $(Agent.BuildDirectory)/rocm/include/rocm-core/*
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: '$(Agent.BuildDirectory)/rocm'
+    clean: false
+    targetDir: '$(Build.BinariesDirectory)/include'
+    contentsString: |
+      $(Agent.BuildDirectory)/rocm/include/hsakmt/*
+- template: /templates/steps/artifact-prepare-package.yml
+  parameters:
+    sourceDir: '$(Agent.BuildDirectory)/rocm/include/hsakmt'
+    clean: false
+    targetDir: '$(Build.BinariesDirectory)/include/hsakmt'
+- template: /templates/steps/artifact-upload.yml
+  parameters:
+    artifactName: amdgpu_runtime_dev

@@ -1,6 +1,6 @@
 jobs:
 - job: ROCT_Thunk_Interface
-  pool: NV31
+  pool: gfx1100
   workspace:
     clean: all
   steps:

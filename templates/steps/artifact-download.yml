@@ -18,7 +18,7 @@ steps:
     branchName: ${{parameters.branchName }}
 - task: ExtractFiles@1
   inputs:
-    archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.tar.gz'
+    archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.tar.xz'
     destinationFolder: '$(Agent.BuildDirectory)/rocm'
     cleanDestinationFolder: false
     overwriteExistingFiles: true
