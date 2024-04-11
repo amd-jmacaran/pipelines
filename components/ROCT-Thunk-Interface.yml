@@ -1,3 +1,8 @@
+parameters:
+- name: aptPackages
+  type: string
+  default: 'libnuma-dev'
+
 jobs:
 - job: ROCT_Thunk_Interface
   pool:
