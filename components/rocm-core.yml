@@ -1,6 +1,7 @@
 jobs:
 - job: rocm_core
-  pool: ubuntu-22.04
+  pool:
+    vmImage: ubuntu-22.04
   workspace:
     clean: all
   steps:

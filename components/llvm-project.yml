@@ -1,6 +1,7 @@
 jobs:
 - job: llvm_project
-  pool: ubuntu-22.04
+  pool:
+    vmImage: ubuntu-22.04
   workspace:
     clean: all
   steps:

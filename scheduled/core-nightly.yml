@@ -9,7 +9,8 @@ trigger: none
 
 jobs:
   - job:
-    pool: ubuntu-22.04
+    pool:
+      vmImage: ubuntu-22.04
     steps:
     - template: /templates/steps/artifact-download.yml
       parameters:
