@@ -1,7 +1,7 @@
 parameters:
 - name: aptPackages
   type: string
-  default: 'libnuma-dev'
+  default: 'libnuma-dev libdrm-dev'
 
 jobs:
 - job: ROCT_Thunk_Interface
