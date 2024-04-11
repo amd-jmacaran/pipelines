@@ -9,8 +9,7 @@ trigger: none
 
 jobs:
   - job:
-    timeoutInMinutes: 90 # extend from default 60 for the added packaging
-    pool: gfx1100
+    pool: ubuntu-22.04
     steps:
     - template: /templates/steps/artifact-download.yml
       parameters:
@@ -43,6 +42,8 @@ jobs:
       parameters:
         sourceDir: $(Agent.BuildDirectory)/rocm
     - template: /templates/steps/artifact-upload.yml
+      parameters:
+        publish: false
     # upload partial amdgpu compiler components
     - template: /templates/steps/artifact-prepare-package.yml
       parameters:
@@ -60,7 +61,7 @@ jobs:
           $(Agent.BuildDirectory)/rocm/llvm/bin/offload-arch*
     - template: /templates/steps/artifact-upload.yml
       parameters:
-        artifactName: amdgpu_compiler
+        publish: false
     # upload amdgpu runtime
     - template: /templates/steps/artifact-prepare-package.yml
       parameters:
@@ -78,7 +79,7 @@ jobs:
           $(Agent.BuildDirectory)/rocm/lib/libhsakmt*
     - template: /templates/steps/artifact-upload.yml
       parameters:
-        artifactName: amdgpu_runtime
+        publish: false
     # upload amdgpu runtime dev
     - template: /templates/steps/artifact-prepare-package.yml
       parameters:
@@ -105,5 +106,3 @@ jobs:
         clean: false
         targetDir: '$(Build.BinariesDirectory)/include/hsakmt'
     - template: /templates/steps/artifact-upload.yml
-      parameters:
-        artifactName: amdgpu_runtime_dev

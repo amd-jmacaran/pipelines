@@ -1,6 +1,6 @@
 jobs:
 - job: ROCT_Thunk_Interface
-  pool: gfx1100
+  pool: ubuntu-22.04
   workspace:
     clean: all
   steps:

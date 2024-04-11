@@ -1,13 +1,13 @@
 # compress build products into tarball
 # delete build products after compression
 parameters:
-- name: artifactName # REQUIRED PARAMETER
-  type: string
-  default: 'drop'
+- name: publish
+  type: boolean
+  default: true
 
 steps:
 - task: ArchiveFiles@2
-  displayName: '${{ parameters.artifactName }} Compress'
+  displayName: 'Compress Deliverables'
   inputs:
     includeRootFolder: false
     archiveType: 'tar'
@@ -20,8 +20,7 @@ steps:
     Contents: '/**/*'
     RemoveDotFiles: true
 # then publish it
-- task: PublishBuildArtifacts@1
-  displayName: '${{ parameters.artifactName }} Publish'
-  retryCountOnTaskFailure: 3
-  inputs:
-    ArtifactName: '${{ parameters.artifactName }}'
+- ${{ if parameters.publish }}:
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Deliverables'
+    retryCountOnTaskFailure: 3

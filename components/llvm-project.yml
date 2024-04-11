@@ -1,7 +1,6 @@
 jobs:
 - job: llvm_project
-  pool: gfx1100
-  timeoutInMinutes: 90 # extend from default 60 just for this
+  pool: ubuntu-22.04
   workspace:
     clean: all
   steps:
