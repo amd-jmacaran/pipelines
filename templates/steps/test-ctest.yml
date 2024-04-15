@@ -13,9 +13,4 @@ steps:
     targetType: inline
     script: ctest --output-on-failure --output-junit test_output.xml
     workingDirectory: build
-- task: PublishTestResults@2
-  displayName: 'Results'
-  inputs:
-    testResultsFormat: 'junit'
-    testResultsFiles: '**/test_output.xml'
-  condition: succeededOrFailed()
+- template: /templates/steps/publish-ctest-results.yml
