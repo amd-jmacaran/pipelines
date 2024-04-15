@@ -1,0 +1,13 @@
+jobs:
+- job: hipBLAS
+  pool: gfx1100
+  workspace:
+    clean: all
+  steps:
+  - template: /templates/steps/preamble.yml
+  - template: /templates/steps/checkout.yml
+  - ${{ if parameters.aptPackages }}:
+    - template: /templates/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+  - template: /templates/steps/build-with-install-script.yml
