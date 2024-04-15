@@ -11,3 +11,8 @@ jobs:
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
   - template: /templates/steps/build-with-install-script.yml
+  - script: |
+        ls
+        cd ./build/release/clients/staging
+        ./hipblas-test --gtest_output=xml:=test_output.xml
+  - template: /templates/steps/test-ctest.yml
