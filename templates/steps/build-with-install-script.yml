@@ -1,0 +1,5 @@
+- script: |
+      # -c: clients(which normally provide tests), -i: installs the build onto the system, -d: installs the dependencies
+      sudo apt -y --fix-broken install
+      ./install.sh -c -i -d
+  displayName: 'Installing via the install script'
