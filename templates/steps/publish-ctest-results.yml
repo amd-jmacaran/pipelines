@@ -1,6 +1,6 @@
 task: PublishTestResults@2
-  displayName: 'Results'
-  inputs:
+displayName: 'Results'
+inputs:
     testResultsFormat: 'junit'
     testResultsFiles: '**/test_output.xml'
-  condition: succeededOrFailed()
+condition: succeededOrFailed()
