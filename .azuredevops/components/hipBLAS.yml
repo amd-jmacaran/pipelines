@@ -20,5 +20,5 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
     parameters:
       testDir: build/release/clients/staging
-      testExecutable: ./hipblas-test
+      testBinary: ./hipblas-test
       testParameters:  --gtest_output=xml:=test_output.xml
