@@ -20,7 +20,7 @@ steps:
   continueOnError: true
   inputs:
     targetType: inline
-    script: ${{ parameters.testBinary }} ${{ parameters.testParameters }}
+    script: ${{ parameters.testExecutable }} ${{ parameters.testParameters }}
     workingDirectory: ${{ parameters.testDir }}
 - task: PublishTestResults@2
   displayName: 'Results'
