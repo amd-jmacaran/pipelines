@@ -19,15 +19,16 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:        
       extraBuildFlags: >-
-        -D CMAKE_BUILD_TYPE=Release
+        -DCMAKE_CXX_COMPILER=hipcc
+        -DCMAKE_BUILD_TYPE=Release
         -DROCM_PATH=/opt/rocm
         -DCMAKE_PREFIX_PATH=/opt/rocm
         -DCPACK_SET_DESTDIR=OFF
         -DCPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF
         -DBUILD_TEST=ON
-        -D BUILD_BENCHMARK=ON 
-        -D BUILD_EXAMPLE=ON
-        -D AMDGPU_TARGETS="gfx1100;gfx1101;gfx1102"
-        -D AMDGPU_TESTTARGETS="gfx1100;gfx1101;gfx1102"
+        -DBUILD_BENCHMARK=ON 
+        -DBUILD_EXAMPLE=ON
+        -DAMDGPU_TARGETS="gfx1100;gfx1101;gfx1102"
+        -DAMDGPU_TESTTARGETS="gfx1100;gfx1101;gfx1102"
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
