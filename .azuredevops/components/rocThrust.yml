@@ -25,7 +25,8 @@ jobs:
         -DCPACK_SET_DESTDIR=OFF
         -DCPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF
         -D BUILD_TEST=ON
-        -D BUILD_BENCHMARK=ON -D BUILD_EXAMPLE=ON
+        -D BUILD_BENCHMARK=ON 
+        -D BUILD_EXAMPLE=ON
         -D AMDGPU_TARGETS="gfx1100;gfx1101;gfx1102"
         -D AMDGPU_TESTTARGETS="gfx1100;gfx1101;gfx1102"
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
