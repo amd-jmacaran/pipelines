@@ -19,11 +19,11 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:        
       extraBuildFlags: >-
-        -D CMAKE_BUILD_TYPE=Release 
+        -D CMAKE_BUILD_TYPE=Release
         -DROCM_PATH=/opt/rocm
-        -DCMAKE_PREFIX_PATH=/opt/rocm 
+        -DCMAKE_PREFIX_PATH=/opt/rocm
         -DCPACK_SET_DESTDIR=OFF
-        -DCPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF 
+        -DCPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF
         -D BUILD_TEST=ON
         -D BUILD_BENCHMARK=ON -D BUILD_EXAMPLE=ON
         -D AMDGPU_TARGETS="gfx1100;gfx1101;gfx1102"
