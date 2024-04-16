@@ -3,48 +3,51 @@
 # any changes for clr should just trigger HIP pipeline
 jobs:
 - job: hip
+  variables:
+  - group: common
+  - template: /.azuredevops/variables-global.yml
   pool:
-    vmImage: ubuntu-22.04
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   workspace:
     clean: all
   steps:
-  - template: /templates/steps/checkout.yml
-  - template: /templates/steps/checkout.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: clr_repo
-  - template: /templates/steps/checkout.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: hipcc_repo
 # ${{ }} are resolved during compile-time
 # so this next step is skipped completely until
 # we define explicit aptPackages needed to install
   - ${{ if parameters.aptPackages }}:
-    - template: /templates/steps/dependencies.yml
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
 # download tasks has built in 4x retry download count
 # these will download last passing build for that branch
-  - template: /templates/steps/artifact-download.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
     parameters:
       componentName: llvm-project
       branchName: amd-staging
-  - template: /templates/steps/artifact-download.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
     parameters:
       componentName: ROCT-Thunk-Interface
       branchName: master
-  - template: /templates/steps/artifact-download.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
     parameters:
       componentName: ROCR-Runtime
       branchName: master
   - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
     displayName: 'Artifact listing'
 # compile hipcc
-  - template: /templates/steps/build-cmake.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       componentName: hipcc
       cmakeBuildDir: 'HIPCC/build'
 # compile clr
-  - template: /templates/steps/build-cmake.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       componentName: clr
       cmakeBuildDir: 'clr/build'
@@ -58,4 +61,4 @@ jobs:
         -DHIP_CATCH_TEST=1
         -DCLR_BUILD_HIP=ON
         -DCLR_BUILD_OCL=OFF
-  - template: /templates/steps/artifact-upload.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml

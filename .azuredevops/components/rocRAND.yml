@@ -1,19 +1,22 @@
 jobs:
 - job: rocrand
-  pool: NV31
+  variables:
+  - group: common
+  - template: /.azuredevops/variables-global.yml
+  pool: ${{ variables.HIGH_END_BUILD_POOL }}
   workspace:
     clean: all
   steps:
-  - template: /templates/steps/preamble.yml
-  - template: /templates/steps/checkout.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
 # ${{ }} are resolved during compile-time
 # so this next step is skipped completely until
 # we define explicit aptPackages needed to install
   - ${{ if parameters.aptPackages }}:
-    - template: /templates/steps/dependencies.yml
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
-  - template: /templates/steps/build-cmake.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
         -DBUILD_TEST=ON
@@ -22,4 +25,4 @@ jobs:
         -DAMDGPU_TARGETS=gfx1100
         -DAMDGPU_TARGETS=gfx1100
         -GNinja
-  - template: /templates/steps/artifact-upload.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml

@@ -5,33 +5,36 @@ parameters:
 
 jobs:
 - job: rocr_runtime
+  variables:
+  - group: common
+  - template: /.azuredevops/variables-global.yml
   pool:
-    vmImage: ubuntu-22.04
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   workspace:
     clean: all
   steps:
-  - template: /templates/steps/preamble.yml
-  - template: /templates/steps/checkout.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
 # ${{ }} are resolved during compile-time
 # so this next step is run because
 # we define explicit aptPackages needed to install
   - ${{ if parameters.aptPackages }}:
-    - template: /templates/steps/dependencies.yml
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
-  - template: /templates/steps/artifact-download.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
     parameters:
       componentName: llvm-project
       branchName: amd-staging
-  - template: /templates/steps/artifact-download.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
     parameters:
       componentName: ROCT-Thunk-Interface
       branchName: master
   - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
     displayName: 'Artifact listing'
-  - template: /templates/steps/build-cmake.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
         -DCMAKE_PREFIX_PATH="$(Agent.BuildDirectory)/rocm"
       cmakeBuildDir: 'src/build'
-  - template: /templates/steps/artifact-upload.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml

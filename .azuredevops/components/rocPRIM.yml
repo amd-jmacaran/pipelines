@@ -1,0 +1,28 @@
+jobs:
+- job: rocprim
+  variables:
+  - group: common
+  - template: /.azuredevops/variables-global.yml
+  pool: ${{ variables.HIGH_END_BUILD_POOL }}
+  workspace:
+    clean: all
+  steps:
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+# ${{ }} are resolved during compile-time
+# so this next step is skipped completely until
+# we define explicit aptPackages needed to install
+  - ${{ if parameters.aptPackages }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
+    parameters:
+      extraBuildFlags: >-
+        -DBUILD_BENCHMARK=ON
+        -DCMAKE_CXX_COMPILER=hipcc
+        -DAMDGPU_TARGETS=gfx1100
+        -DAMDGPU_TARGETS=gfx1100
+        -GNinja
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
