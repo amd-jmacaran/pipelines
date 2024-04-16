@@ -1,0 +1,24 @@
+jobs:
+- job: rccl
+  variables:
+  - group: common
+  - template: /.azuredevops/variables-global.yml
+  pool: ${{ variables.HIGH_END_BUILD_POOL }}
+  workspace:
+    clean: all
+  steps:
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+  - ${{ if parameters.aptPackages }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-script.yml
+    parameters:
+      scriptExecutable: ./install.sh
+      scriptParameters: -d --local_gpu_only -t
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
+    parameters:
+      testDir: build/release/test
+      testExecutable: ./rccl-UnitTests --gtest_output=xml:test_output.xml
+      testParameters: --gtest_output=xml:test_output.xml
