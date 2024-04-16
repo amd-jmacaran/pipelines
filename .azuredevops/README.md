@@ -10,7 +10,6 @@ ROCm-CI Azure DevOps Pipelines contains markup language files that orchestrate b
 - `/.azuredevops/scheduled` - the sequence of templated steps for jobs that are schedule-based and not tied to a specific ROCm repo
 - `/.azuredevops/templates` - reusable yml files representing the templated steps that form the sequences in the above directories
 
-
 ### Per ROCm Repo
 
 - `/.azuredevops/rocm-ci.yml` - contains the CI and PR trigger definitions associated with that repo, pointing to the corresponding yml file in the components folder in this central repository

@@ -4,7 +4,7 @@ parameters:
   default: 'libelf-dev g++ libdrm-dev libnuma-dev'
 
 jobs:
-- job: rocr_runtime
+- job: ROCR_Runtime
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml

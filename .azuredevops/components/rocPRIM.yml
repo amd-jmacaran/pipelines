@@ -1,5 +1,5 @@
 jobs:
-- job: rocprim
+- job: rocPRIM
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml

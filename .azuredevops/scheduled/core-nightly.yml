@@ -1,0 +1,109 @@
+schedules:
+- cron: '6 0 * * *'
+  displayName: nightly build
+  branches:
+    include:
+    - main
+
+trigger: none
+
+jobs:
+  - job:
+    pool:
+      vmImage: ubuntu-22.04
+    steps:
+    - template: /templates/steps/artifact-download.yml
+      parameters:
+        componentName: rocm-cmake
+        branchName: develop
+    - template: /templates/steps/artifact-download.yml
+      parameters:
+        componentName: rocm-core
+        branchName: master
+    - template: /templates/steps/artifact-download.yml
+      parameters:
+        componentName: ROCT-Thunk-Interface
+        branchName: master
+    - template: /templates/steps/artifact-download.yml
+      parameters:
+        componentName: llvm-project
+        branchName: amd-staging
+    - template: /templates/steps/artifact-download.yml
+      parameters:
+        componentName: ROCR-Runtime
+        branchName: master
+    - template: /templates/steps/artifact-download.yml
+      parameters:
+        componentName: clr
+        branchName: rocm-6.0.x
+    - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
+      displayName: 'Artifact listing'
+    # upload everything bundled together
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: $(Agent.BuildDirectory)/rocm
+    - template: /templates/steps/artifact-upload.yml
+      parameters:
+        publish: false
+    # upload partial amdgpu compiler components
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: $(Agent.BuildDirectory)/rocm
+        contentsString: |
+          $(Agent.BuildDirectory)/rocm/amdgcn/*
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: $(Agent.BuildDirectory)/rocm/llvm
+        clean: false
+        contentsString: |
+          $(Agent.BuildDirectory)/rocm/llvm/bin/amdgpu*
+          $(Agent.BuildDirectory)/rocm/llvm/bin/clang*
+          $(Agent.BuildDirectory)/rocm/llvm/bin/*lld*
+          $(Agent.BuildDirectory)/rocm/llvm/bin/offload-arch*
+    - template: /templates/steps/artifact-upload.yml
+      parameters:
+        publish: false
+    # upload amdgpu runtime
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: $(Agent.BuildDirectory)/rocm/hip
+        contentsString: |
+          $(Agent.BuildDirectory)/rocm/hip/lib/*.so
+          $(Agent.BuildDirectory)/rocm/hip/lib/*.so.*
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: $(Agent.BuildDirectory)/rocm
+        clean: false
+        contentsString: |
+          $(Agent.BuildDirectory)/rocm/lib/*.so
+          $(Agent.BuildDirectory)/rocm/lib/*.so.*
+          $(Agent.BuildDirectory)/rocm/lib/libhsakmt*
+    - template: /templates/steps/artifact-upload.yml
+      parameters:
+        publish: false
+    # upload amdgpu runtime dev
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: '$(Agent.BuildDirectory)/rocm/hip'
+        contentsString: |
+          $(Agent.BuildDirectory)/rocm/hip/include/*
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: '$(Agent.BuildDirectory)/rocm'
+        clean: false
+        contentsString: |
+          $(Agent.BuildDirectory)/rocm/include/hsa/*
+          $(Agent.BuildDirectory)/rocm/include/rocm-core/*
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: '$(Agent.BuildDirectory)/rocm'
+        clean: false
+        targetDir: '$(Build.BinariesDirectory)/include'
+        contentsString: |
+          $(Agent.BuildDirectory)/rocm/include/hsakmt/*
+    - template: /templates/steps/artifact-prepare-package.yml
+      parameters:
+        sourceDir: '$(Agent.BuildDirectory)/rocm/include/hsakmt'
+        clean: false
+        targetDir: '$(Build.BinariesDirectory)/include/hsakmt'
+    - template: /templates/steps/artifact-upload.yml
