@@ -1,7 +1,7 @@
 parameters:
 - name: aptPackages
   type: string
-  default: 'libelf-dev g++'
+  default: 'libelf-dev g++ libdrm'
 
 jobs:
 - job: rocr_runtime
