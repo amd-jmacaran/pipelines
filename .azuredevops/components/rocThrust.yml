@@ -2,8 +2,6 @@ jobs:
 - job: rocThrust
   variables:
   - group: common
-  variables:
-  - group: common
   - template: /.azuredevops/variables-global.yml
   pool: ${{ variables.HIGH_END_BUILD_POOL }}
   workspace:
