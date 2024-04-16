@@ -21,4 +21,4 @@ jobs:
     parameters:
       testDir: build/release/clients/staging
       testExecutable: ./hipblas-test
-      testParameters:  --gtest_output=xml:=test_output.xml
+      testParameters: --gtest_output=xml:test_output.xml
