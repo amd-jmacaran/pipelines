@@ -1,5 +1,6 @@
 jobs:
 - job: rocThrust
+  timeoutInMinutes: 120
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
