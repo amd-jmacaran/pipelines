@@ -1,0 +1,33 @@
+jobs:
+- job: rocThrust
+  variables:
+  - group: common
+  - template: /.azuredevops/variables-global.yml
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
+  workspace:
+    clean: all
+  steps:
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+# ${{ }} are resolved during compile-time
+# so this next step is skipped completely until
+# we define explicit aptPackages needed to install
+  - ${{ if parameters.aptPackages }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
+    parameters:        
+      extraBuildFlags: >-
+        -D CMAKE_BUILD_TYPE=Release 
+        -DROCM_PATH=/opt/rocm
+        -DCMAKE_PREFIX_PATH=/opt/rocm 
+        -DCPACK_SET_DESTDIR=OFF
+        -DCPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF 
+        -D BUILD_TEST=ON
+        -D BUILD_BENCHMARK=ON -D BUILD_EXAMPLE=ON
+        -D AMDGPU_TARGETS="gfx1100;gfx1101;gfx1102"
+        -D AMDGPU_TESTTARGETS="gfx1100;gfx1101;gfx1102"
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
