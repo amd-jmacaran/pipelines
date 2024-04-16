@@ -4,6 +4,9 @@ parameters:
 - name: aptPackages
   type: string
   default: ''
+- name: pipModules
+  type: string
+  default: ''
 
 steps:
 - task: Bash@3
@@ -27,3 +30,9 @@ steps:
     inputs:
       targetType: inline
       script: sudo apt-get --yes install ${{ parameters.aptPackages }}
+- ${{ if parameters.pipModules }}:
+  - task: Bash@3
+    displayName: 'pip install  ...'
+    inputs:
+      targetType: inline
+      script: pip install ${{ parameters.pipModules }}

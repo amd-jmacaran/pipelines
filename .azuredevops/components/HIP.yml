@@ -2,6 +2,9 @@ parameters:
 - name: aptPackages
   type: string
   default: 'libnuma-dev mesa-common-dev'
+- name: pipModules
+  type: string
+  default: 'CppHeaderParser'
 
 # hip and clr are tightly-coupled
 # run this same template for both repos
@@ -30,6 +33,7 @@ jobs:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
+        pipModules: ${{ parameters.pipModules }}
 # download tasks has built in 4x retry download count
 # these will download last passing build for that branch
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
