@@ -1,5 +1,5 @@
 jobs:
-- job: rocminfo
+- job: rocprofiler_register
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
@@ -17,12 +17,5 @@ jobs:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
-    parameters:
-      componentName: ROCR-Runtime
-      branchName: master
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
-    parameters:
-      extraBuildFlags: >-
-        -DCMAKE_PREFIX_PATH="$(Agent.BuildDirectory)/rocm"
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml

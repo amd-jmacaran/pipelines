@@ -45,6 +45,10 @@ jobs:
     parameters:
       componentName: ROCR-Runtime
       branchName: master
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: rocprofiler-register
+      branchName: amd-mainline
   - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
     displayName: 'Artifact listing'
 # compile clr
@@ -52,7 +56,6 @@ jobs:
     parameters:
       componentName: clr
       cmakeBuildDir: 'clr/build'
-      installDir: '$(Build.BinariesDirectory)/hip'
       extraBuildFlags: >-
         -DHIP_COMMON_DIR="$(Build.SourcesDirectory)/HIP"
         -DHIP_PLATFORM=amd

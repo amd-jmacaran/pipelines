@@ -1,9 +1,16 @@
+parameters:
+- name: aptPackages
+  type: string
+  default: 'ninja-build'
+
 jobs:
 - job: rocrand
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: ${{ variables.HIGH_END_BUILD_POOL }}
+
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   workspace:
     clean: all
   steps:
@@ -16,13 +23,80 @@ jobs:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
+#  - script: sudo dpkg -L libhsa-runtime64-1
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: llvm-project
+      branchName: amd-staging
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: ROCT-Thunk-Interface
+      branchName: master
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: ROCR-Runtime
+      branchName: master
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: rocprofiler-register
+      branchName: amd-mainline
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: clr
+      branchName: develop
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: rocminfo
+      branchName: master
+  - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
+    displayName: 'Artifact listing'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
+        -DCMAKE_PREFIX_PATH="$(Agent.BuildDirectory)/rocm"
         -DBUILD_TEST=ON
-        -DCMAKE_PREFIX_PATH=/opt/rocm
         -DCMAKE_CXX_COMPILER=hipcc
         -DAMDGPU_TARGETS=gfx1100
-        -DAMDGPU_TARGETS=gfx1100
+        -DAMDGPU_TEST_TARGETS=gfx1100
         -GNinja
+# copy ROCm stack for packaging
+  - task: CopyFiles@2
+    displayName: 'Prepare for packaging'
+    inputs:
+      SourceFolder: '$(Agent.BuildDirectory)/rocm'
+      TargetFolder: '$(Build.BinariesDirectory)'
+      retryCount: 3
+      Contents: 'lib/**'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
+
+- job: test_rocrand
+  dependsOn: rocrand
+  condition: succeeded('rocrand')
+  variables:
+  - group: common
+  - template: /.azuredevops/variables-global.yml
+
+  pool: HighEnd
+  workspace:
+    clean: all
+  steps:
+  - task: DownloadBuildArtifacts@1
+    displayName: Download test files
+  - task: ExtractFiles@1
+    inputs:
+      archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.tar.xz'
+      destinationFolder: '$(Agent.BuildDirectory)/rocm'
+      cleanDestinationFolder: false
+      overwriteExistingFiles: true
+  - task: DeleteFiles@1
+    inputs:
+      SourceFolder: '$(System.ArtifactsDirectory)'
+      Contents: '/**/*.tar.xz'
+      RemoveDotFiles: true
+  - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
+    displayName: 'Artifact listing'
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
+    parameters:
+      testDir: '$(Agent.BuildDirectory)/rocm/bin/rocRAND'
+      testExecutable: 'LD_LIBRARY_PATH=$(Agent.BuildDirectory)/rocm/lib ctest'
+      testParameters: '--output-on-failure --force-new-ctest-process --output-junit test_output.xml'
