@@ -28,4 +28,4 @@ steps:
     displayName: '${{ parameters.artifactName }} Publish'
     retryCountOnTaskFailure: 3
     inputs:
-      ArtifactName: '${{ parameters.artifactName }}'
+      ArtifactName: '$(Build.BuildNumber)_ubuntu2204_${{ parameters.artifactName }}'
