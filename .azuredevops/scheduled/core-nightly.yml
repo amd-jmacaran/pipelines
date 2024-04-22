@@ -59,7 +59,7 @@ jobs:
       parameters:
         sourceDir: $(Agent.BuildDirectory)/rocm
         contentsString: |
-          $(Agent.BuildDirectory)/rocm/amdgcn/*
+          $(Agent.BuildDirectory)/rocm/amdgcn/**/*
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-prepare-package.yml
       parameters:
         sourceDir: $(Agent.BuildDirectory)/rocm/llvm
@@ -68,6 +68,7 @@ jobs:
           $(Agent.BuildDirectory)/rocm/llvm/**/*
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
       parameters:
+        artifactName: amdgpu_compiler
         publish: false
     # upload amdgpu runtime
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-prepare-package.yml
@@ -78,11 +79,13 @@ jobs:
           $(Agent.BuildDirectory)/rocm/lib/*.so.*
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
       parameters:
+        artifactName: amdgpu_runtime
         publish: false
     # upload amdgpu runtime dev
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-prepare-package.yml
       parameters:
         sourceDir: '$(Agent.BuildDirectory)/rocm'
         contentsString: |
-          $(Agent.BuildDirectory)/rocm/include/*
+          $(Agent.BuildDirectory)/rocm/include/**/*
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
+        artifactName: amdgpu_runtime_dev
