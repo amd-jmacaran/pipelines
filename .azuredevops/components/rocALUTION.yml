@@ -16,6 +16,7 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-script.yml
     parameters:
       scriptExecutable: ./install.sh
+      scriptParameters: -i -c -d
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
     parameters:
       testDir: build/release/clients/staging
