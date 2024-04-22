@@ -9,13 +9,13 @@ trigger: none
 
 jobs:
   - job:
-  variables:
-  - group: common
-  - template: /.azuredevops/variables-global.yml
+    variables:
+    - group: common
+    - template: /.azuredevops/variables-global.yml
 
-  pool: HighEnd
-  workspace:
-    clean: all
+    pool: HighEnd
+    workspace:
+      clean: all
     steps:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
       parameters:
