@@ -88,4 +88,5 @@ jobs:
         contentsString: |
           $(Agent.BuildDirectory)/rocm/include/**/*
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
+      parameters:
         artifactName: amdgpu_runtime_dev
