@@ -19,9 +19,9 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
-        -DAMDGPU_TARGETS=gfx1100 
-        -DROCWMMA_BUILD_VALIDATION_TESTS=ON 
-        -DROCWMMA_BUILD_BENCHMARK_TESTS=OFF 
+        -DAMDGPU_TARGETS=gfx1100
+        -DROCWMMA_BUILD_VALIDATION_TESTS=ON
+        -DROCWMMA_BUILD_BENCHMARK_TESTS=OFF
         -DROCWMMA_BUILD_SAMPLES=OFF
         -GNinja
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
