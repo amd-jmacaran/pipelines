@@ -23,6 +23,6 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
     parameters:
-      testDir: tests/rocm_smi_test
-      testExecutable: rsmitst
+      testDir: build/tests/rocm_smi_test
+      testExecutable: ./rsmitst
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
