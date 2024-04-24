@@ -25,4 +25,5 @@ jobs:
     parameters:
       testDir: build/tests/rocm_smi_test
       testExecutable: ./rsmitst
+      testParameters: --gtest_output=xml:test_output.xml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
