@@ -15,7 +15,7 @@ jobs:
         aptPackages: ${{ parameters.aptPackages }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-script.yml
     parameters:
-      scriptExecutable: sudo ./install
+      scriptExecutable: sudo ./install.sh
       scriptParameters: -c -i -d
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
     parameters:
