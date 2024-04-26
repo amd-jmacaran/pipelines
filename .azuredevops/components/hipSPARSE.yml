@@ -21,4 +21,3 @@ jobs:
     parameters:
       testDir: build/release/clients/staging
       testExecutable: sudo ./hipsparse-test
-      testParameters: --gtest_output=xml:test_output.xml
