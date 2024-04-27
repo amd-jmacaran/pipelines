@@ -1,11 +1,3 @@
-parameters:
-- name: aptPackages
-  type: string
-  default: 'doxygen doxygen-doc ninja-build python3-sphinx'
-- name: pipModules
-  type: string
-  default: 'cget ninja'
-
 jobs:
 - job: rocm_cmake
   variables:
@@ -20,5 +12,10 @@ jobs:
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+  - task: Bash@3
+    displayName: 'Dependency Setup'
+    inputs:
+      targetType: inline
+      script: 'python MIVisionX-setup.py'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
