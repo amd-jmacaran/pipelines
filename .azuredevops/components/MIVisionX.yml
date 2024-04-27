@@ -1,5 +1,5 @@
 jobs:
-- job: rocm_cmake
+- job: mivisionx
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
@@ -16,6 +16,6 @@ jobs:
     displayName: 'Dependency Setup'
     inputs:
       targetType: inline
-      script: 'python MIVisionX-setup.py'
+      script: 'python3 MIVisionX-setup.py'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
