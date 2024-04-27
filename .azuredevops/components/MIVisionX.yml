@@ -1,3 +1,8 @@
+parameters:
+- name: aptPackages
+  type: string
+  default: 'cmake ninja-build'
+
 jobs:
 - job: mivisionx
   variables:
@@ -12,6 +17,10 @@ jobs:
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+  - ${{ if parameters.aptPackages }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
   - task: Bash@3
     displayName: 'Dependency Setup'
     inputs:
