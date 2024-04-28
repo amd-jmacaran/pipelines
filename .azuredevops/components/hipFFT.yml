@@ -1,7 +1,7 @@
 parameters:
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build hiprand rocfft libboost-program-options-dev googletest libfftw3-dev'
+  default: 'cmake ninja-build rocrand hiprand rocfft libboost-program-options-dev googletest libfftw3-dev'
 
 jobs:
 - job: hipfft
