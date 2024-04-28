@@ -1,7 +1,7 @@
 parameters:
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build rocfft'
+  default: 'cmake ninja-build rocfft libboost-all-dev libc++-dev'
 
 jobs:
 - job: hipfft
