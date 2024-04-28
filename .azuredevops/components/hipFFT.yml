@@ -1,4 +1,7 @@
 parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
 - name: aptPackages
   type: string
   default: 'cmake ninja-build rocrand hiprand rocfft libboost-program-options-dev googletest libfftw3-dev'
@@ -17,6 +20,8 @@ jobs:
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+    parameters:
+      checkoutRepo: ${{ parameters.checkoutRepo }}
   - ${{ if parameters.aptPackages }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
