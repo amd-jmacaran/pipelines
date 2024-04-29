@@ -8,8 +8,7 @@ resources:
     type: github
     endpoint: github.com_abhimeda
     name: abhimeda/rocPRIM
-    ref: release/rocm-rel-6.1
-
+    ref: refs/tags/rocm-6.1.0
 variables:
 - group: common
 - template: /.azuredevops/variables-global.yml@pipelines_repo
