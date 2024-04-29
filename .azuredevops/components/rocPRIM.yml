@@ -1,9 +1,20 @@
+parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
+- name: aptPackages
+  type: string
+  default: ''
+
 jobs:
 - job: rocPRIM
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: ${{ variables.HIGH_END_BUILD_POOL }}
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
+  container:
+    image: rocm/dev-ubuntu-22.04:6.1
   workspace:
     clean: all
   steps:
