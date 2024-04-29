@@ -1,0 +1,6 @@
+{
+  "id": "f4632c463556d86e4132cdf521e300f0abfd85a3",
+  "repo": "compute/ec/build-infra",
+  "revision": "refs/heads/amd-master",
+  "path": "build_dependency_maps/default/component-dependencies-stage2.json"
+}
