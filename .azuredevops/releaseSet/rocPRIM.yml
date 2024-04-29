@@ -1,0 +1,22 @@
+resources:
+  repositories:
+  - repository: pipelines_repo
+    type: github
+    endpoint: github.com_amd-jmacaran
+    name: amd-jmacaran/pipelines
+  - repository: release_repo
+    type: github
+    endpoint: github.com_abhimeda
+    name: abhimeda/rocFFT
+    ref: refs/tags/release/rocm-rel-6.1
+
+variables:
+- group: common
+- template: /.azuredevops/variables-global.yml@pipelines_repo
+
+trigger: none
+
+jobs:
+  - template: ${{ variables.CI_COMPONENT_PATH }}/rocPRIM.yml@pipelines_repo
+    parameters:
+      checkoutRepo: release_repo
