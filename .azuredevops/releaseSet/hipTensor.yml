@@ -17,6 +17,6 @@ variables:
 trigger: none
 
 jobs:
-  - template: ${{ variables.CI_COMPONENT_PATH }}/rocFFT.yml@pipelines_repo
+  - template: ${{ variables.CI_COMPONENT_PATH }}/hipTensor.yml@pipelines_repo
     parameters:
       checkoutRepo: release_repo
