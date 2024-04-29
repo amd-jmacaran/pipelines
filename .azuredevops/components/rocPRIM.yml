@@ -4,7 +4,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake'
+  default: 'cmake ninja-build'
 
 jobs:
 - job: rocPRIM
