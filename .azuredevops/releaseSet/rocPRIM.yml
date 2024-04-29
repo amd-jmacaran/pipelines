@@ -6,7 +6,7 @@ resources:
     name: amd-jmacaran/pipelines
   - repository: release_repo
     type: github
-    endpoint: github.com_abhimeda
+    endpoint: github.com/abhimeda
     name: abhimeda/rocFFT
     ref: refs/tags/release/rocm-rel-6.1
 
