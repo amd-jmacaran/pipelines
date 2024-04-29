@@ -8,7 +8,7 @@ resources:
     type: github
     endpoint: github.com_abhimeda
     name: abhimeda/rocPRIM
-    ref: refs/tags/release/rocm-rel-6.1
+    ref: release/rocm-rel-6.1
 
 variables:
 - group: common
