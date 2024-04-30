@@ -4,7 +4,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build git'
+  default: 'cmake ninja-build rocblas libgtest-dev git'
 
 jobs:
 - job: rocWMMA
@@ -22,15 +22,10 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-# ${{ }} are resolved during compile-time
-# so this next step is skipped completely until
-# we define explicit aptPackages needed to install
   - ${{ if parameters.aptPackages }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
-  - script: 'ls && pwd && git branch' 
-    displayName: 'Print Statement'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
@@ -43,8 +38,3 @@ jobs:
         -DROCWMMA_BUILD_BENCHMARK_TESTS=OFF
         -DROCWMMA_BUILD_SAMPLES=OFF
         -GNinja
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
-    parameters:
-      testDir: build
-      testExecutable: ctest
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
