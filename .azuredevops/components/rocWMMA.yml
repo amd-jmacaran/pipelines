@@ -12,8 +12,7 @@ jobs:
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool:
-    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
+  pool: ${{ variables.HIGH_END_BUILD_POOL }}
   container:
     image: rocm/dev-ubuntu-22.04:6.1
   workspace:
