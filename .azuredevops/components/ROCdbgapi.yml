@@ -4,10 +4,10 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build rocrand hiprand libboost-program-options-dev libgtest-dev libfftw3-dev'
+  default: 'cmake ninja-build doxygen graphviz texlive-full'
 
 jobs:
-- job: rocfft
+- job: rocdbgapi
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
@@ -29,12 +29,6 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
-        -DCMAKE_CXX_COMPILER=hipcc
-        -DCMAKE_C_COMPILER=hipcc
-        -DCMAKE_PREFIX_PATH=/opt/rocm
         -DCMAKE_BUILD_TYPE=Release
-        -DAMDGPU_TARGETS=gfx1100
-        -DUSE_HIP_CLANG=ON
-        -DHIP_COMPILER=clang
         -GNinja
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
