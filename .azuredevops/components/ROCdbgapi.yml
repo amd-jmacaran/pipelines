@@ -4,7 +4,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build doxygen graphviz texlive-full'
+  default: 'cmake ninja-build doxygen graphviz texlive texlive-extra-utils texlive-plain-generic texlive-xetex'
 
 jobs:
 - job: rocdbgapi
