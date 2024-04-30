@@ -7,12 +7,11 @@ parameters:
   default: 'cmake ninja-build'
 
 jobs:
-- job: hiptensor
+- job: composable_kernel
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool:
-    vmImage: ${{ variables.HIGH_END_BUILD_POOL }}
+  pool: 'Alex Test'
   container:
     image: rocm/dev-ubuntu-22.04:6.1
   workspace:
