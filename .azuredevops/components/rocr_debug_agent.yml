@@ -26,9 +26,12 @@ jobs:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
+  - script: 'ls -1R /opt/rocm'
+    displayName: 'Artifact listing'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
         -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_MODULE_PATH=/opt/rocm/hip
         -GNinja
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
