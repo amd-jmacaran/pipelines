@@ -4,10 +4,10 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build git'
+  default: 'cmake ninja-build libgtest-dev git'
+
 jobs:
-- job: rocWMMA
-  timeoutInMinutes: 180
+- job: rocPRIM
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
@@ -22,6 +22,9 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
+# ${{ }} are resolved during compile-time
+# so this next step is skipped completely until
+# we define explicit aptPackages needed to install
   - ${{ if parameters.aptPackages }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
