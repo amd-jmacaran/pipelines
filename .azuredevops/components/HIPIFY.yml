@@ -4,7 +4,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build libclang-dev'
+  default: 'cmake ninja-build libnuma-dev'
 
 jobs:
 - job: hipify
