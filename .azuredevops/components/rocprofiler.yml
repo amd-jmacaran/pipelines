@@ -1,0 +1,41 @@
+parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
+- name: aptPackages
+  type: string
+  default: 'cmake ninja-build libgtest-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
+- name: pipModules
+  type: string
+  default: 'barectf bcrypt CppHeaderParser lxml matplotlib pandas protobuf pycparser pyparsing websockets'
+
+jobs:
+- job: rocprofiler
+  variables:
+  - group: common
+  - template: /.azuredevops/variables-global.yml
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
+  container:
+    image: rocm/dev-ubuntu-22.04:6.1
+  workspace:
+    clean: all
+  steps:
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+    parameters:
+      checkoutRepo: ${{ parameters.checkoutRepo }}
+  - ${{ if parameters.aptPackages }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
+      parameters:
+        aptPackages: ${{ parameters.aptPackages }}
+        pipModules: ${{ parameters.pipModules }}
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
+    parameters:
+      extraBuildFlags: >-
+        -DCMAKE_MODULE_PATH="$(Build.SourcesDirectory)/cmake_modules;/opt/rocm/lib/cmake"
+        -DENABLE_LDCONFIG=OFF
+        -DUSE_PROF_API=1
+        -DGPU_TARGETS="gfx1100"
+        -GNinja
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
