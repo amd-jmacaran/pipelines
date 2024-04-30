@@ -7,7 +7,7 @@ parameters:
   default: 'cmake ninja-build git'
 
 jobs:
-- job: hipfft
+- job: rocWMMA
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
