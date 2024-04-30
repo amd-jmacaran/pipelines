@@ -4,7 +4,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build libgtest-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
+  default: 'cmake ninja-build rocm-llvm-dev libgtest-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
 - name: pipModules
   type: string
   default: 'pyyaml==5.3.1 Cppheaderparser websockets matplotlib lxml barectf'
@@ -34,7 +34,7 @@ jobs:
     parameters:
       extraBuildFlags: >-
         -DCMAKE_MODULE_PATH="$(Build.SourcesDirectory)/cmake_modules;/opt/rocm/lib/cmake"
-        -DCMAKE_PREFIX_PATH="/opt/rocm/llvm;/opt/rocm"
+        -DCMAKE_PREFIX_PATH="/opt/rocm"
         -DENABLE_LDCONFIG=OFF
         -DUSE_PROF_API=1
         -DGPU_TARGETS="gfx1100"
