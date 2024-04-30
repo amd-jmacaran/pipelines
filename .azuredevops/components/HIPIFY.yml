@@ -4,16 +4,15 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build rocrand hiprand libboost-program-options-dev libgtest-dev libfftw3-dev'
+  default: 'cmake ninja-build libnuma-dev'
 
 jobs:
-- job: rocfft
+- job: hipify
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: gfx1100
-  container:
-    image: rocm/dev-ubuntu-22.04:6.1
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   workspace:
     clean: all
   steps:
@@ -25,15 +24,16 @@ jobs:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: llvm-project
+      branchName: amd-staging
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
-        -DCMAKE_CXX_COMPILER=hipcc
-        -DCMAKE_C_COMPILER=hipcc
-        -DCMAKE_PREFIX_PATH=/opt/rocm
         -DCMAKE_BUILD_TYPE=Release
-        -DAMDGPU_TARGETS=gfx1100
-        -DUSE_HIP_CLANG=ON
-        -DHIP_COMPILER=clang
+        -DCMAKE_PREFIX_PATH="$(Agent.BuildDirectory)/rocm"
+        -DROCM_PATH="$(Agent.BuildDirectory)/rocm"
+        -DHIPCC_BIN_DIR="$(Agent.BuildDirectory)/rocm/bin"
         -GNinja
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
