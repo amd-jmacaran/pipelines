@@ -5,7 +5,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build'
+  default: 'cmake ninja-build git'
 # ========
 jobs:
 - job: rocWMMA
