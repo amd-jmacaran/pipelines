@@ -1,18 +1,33 @@
+# ==== copy this ====
+parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
+- name: aptPackages
+  type: string
+  default: 'cmake ninja-build libgtest-dev git'
+# ========
 jobs:
 - job: rocWMMA
   timeoutInMinutes: 180
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: ${{ variables.HIGH_END_BUILD_POOL }}
+  # ==== copy this ====
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
+  container:
+    image: rocm/dev-ubuntu-22.04:6.1
   workspace:
     clean: all
+  # ========
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
-# ${{ }} are resolved during compile-time
-# so this next step is skipped completely until
-# we define explicit aptPackages needed to install
+   # ==== copy this ====
+    parameters:
+      checkoutRepo: ${{ parameters.checkoutRepo }}
+   # ========
   - ${{ if parameters.aptPackages }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
