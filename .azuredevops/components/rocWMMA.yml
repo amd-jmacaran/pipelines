@@ -1,4 +1,3 @@
-# ==== copy this ====
 parameters:
 - name: checkoutRepo
   type: string
@@ -6,28 +5,23 @@ parameters:
 - name: aptPackages
   type: string
   default: 'cmake ninja-build git'
-# ========
 jobs:
 - job: rocWMMA
   timeoutInMinutes: 180
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  # ==== copy this ====
   pool:
     vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   container:
     image: rocm/dev-ubuntu-22.04:6.1
   workspace:
     clean: all
-  # ========
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
-   # ==== copy this ====
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-   # ========
   - ${{ if parameters.aptPackages }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:
