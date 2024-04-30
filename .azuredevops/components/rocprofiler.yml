@@ -7,7 +7,7 @@ parameters:
   default: 'cmake ninja-build libgtest-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
 - name: pipModules
   type: string
-  default: 'Cppheaderparser websockets matplotlib lxml barectf'
+  default: 'pyyaml==5.9 Cppheaderparser websockets matplotlib lxml barectf'
 
 jobs:
 - job: rocprofiler
