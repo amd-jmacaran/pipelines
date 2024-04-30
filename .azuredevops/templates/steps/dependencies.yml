@@ -29,7 +29,7 @@ steps:
     displayName: 'sudo apt-get install ...'
     inputs:
       targetType: inline
-      script: sudo apt-get --yes install ${{ parameters.aptPackages }}
+      script: sudo DEBIAN_FRONTEND=noninteractive sudo apt-get --yes install ${{ parameters.aptPackages }}
 - ${{ if parameters.pipModules }}:
   - task: Bash@3
     displayName: 'pip install  ...'
