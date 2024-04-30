@@ -4,7 +4,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build rocblas'
+  default: 'cmake ninja-build rocblas libgtest-dev git'
 
 jobs:
 - job: rocWMMA
