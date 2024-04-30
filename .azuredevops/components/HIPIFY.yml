@@ -32,6 +32,6 @@ jobs:
     parameters:
       extraBuildFlags: >-
         -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_PREFIX_PATH=/opt/rocm/llvm
+        -DCMAKE_PREFIX_PATH=/opt/rocm/lib/llvm
         -GNinja
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
