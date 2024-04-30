@@ -5,7 +5,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build libgtest-dev git'
+  default: 'cmake ninja-build'
 # ========
 jobs:
 - job: rocWMMA
