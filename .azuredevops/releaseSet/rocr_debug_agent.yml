@@ -1,3 +1,11 @@
+variables:
+- group: common
+- template: /.azuredevops/variables-global.yml@pipelines_repo
+
+parameters:
+  - name: checkoutRef
+    default: refs/tags/${{ variables.LATEST_RELEASE_TAG }}
+
 resources:
   repositories:
   - repository: pipelines_repo
@@ -8,11 +16,7 @@ resources:
     type: github
     endpoint: github.com_amd-jmacaran
     name: amd-jmacaran/rocr_debug_agent
-    ref: refs/tags/rocm-6.1.0
-
-variables:
-- group: common
-- template: /.azuredevops/variables-global.yml@pipelines_repo
+    ref: ${{ parameters.checkoutRef }}
 
 trigger: none
 
@@ -20,3 +24,4 @@ jobs:
   - template: ${{ variables.CI_COMPONENT_PATH }}/rocr_debug_agent.yml@pipelines_repo
     parameters:
       checkoutRepo: release_repo
+      checkoutRef: ${{ parameters.checkoutRef }}

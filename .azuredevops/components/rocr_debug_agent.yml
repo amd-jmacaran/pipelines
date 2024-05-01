@@ -2,6 +2,9 @@ parameters:
 - name: checkoutRepo
   type: string
   default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
 - name: aptPackages
   type: string
   default: 'cmake ninja-build libelf-dev libdw-dev'
