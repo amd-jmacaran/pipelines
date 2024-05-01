@@ -7,7 +7,7 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'cmake python3-pip libnuma-dev ninja-build ccache'
+  default: 'cmake python3-pip rocm-cmake libnuma-dev ninja-build ccache'
 
 jobs:
 - job: llvm_project
@@ -66,7 +66,6 @@ jobs:
       extraBuildFlags: >-
         -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build"
         -DCMAKE_BUILD_TYPE=Release
-        -DROCM_DIR="$(Build.BinariesDirectory)"
       cmakeBuildDir: 'amd/device-libs/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
@@ -74,7 +73,6 @@ jobs:
       extraBuildFlags: >-
         -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build;$(Build.SourcesDirectory)/amd/device-libs/build"
         -DCMAKE_BUILD_TYPE=Release
-        -DROCM_DIR="$(Build.BinariesDirectory)"
       cmakeBuildDir: 'amd/comgr/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
     parameters:
@@ -88,6 +86,5 @@ jobs:
       extraBuildFlags: >-
         -DCMAKE_BUILD_TYPE=Release
         -DHIPCC_BACKWARD_COMPATIBILITY=OFF
-        -GNinja
       cmakeBuildDir: 'amd/hipcc/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
