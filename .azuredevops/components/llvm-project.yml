@@ -37,7 +37,7 @@ jobs:
   - ${{ if ne( parameters.checkoutRef, '') }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
       parameters:
-        componentName: \release\6.1\rocm-cmake
+        componentName: \release\$(LATEST_RELEASE_TAG)\rocm-cmake
         branchName: main
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
