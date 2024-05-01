@@ -31,5 +31,8 @@ steps:
     retryCountOnTaskFailure: 3
 - ${{ if parameters.publish }}:
   - task: PublishPipelineArtifact@1
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    publishLocation: 'pipeline'
+    displayName: '${{ parameters.artifactName }} Publish'
+    retryCountOnTaskFailure: 3
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)'
+      publishLocation: 'pipeline'
