@@ -17,7 +17,7 @@ jobs:
   pool:
     vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   container:
-    image: rocm/dev-ubuntu-22.04:6.1
+    image: ${{ variables.DOCKER_IMAGE_NAME }}:${{ variables.LATEST_DOCKER_VERSION }}
   workspace:
     clean: all
   steps:

@@ -13,3 +13,7 @@ variables:
   value: gfx1100
 - name: LATEST_RELEASE_TAG
   value: rocm-6.1.0
+- name: DOCKER_IMAGE_NAME
+  value: rocm/dev-ubuntu-22.04
+- name: LATEST_DOCKER_VERSION
+  value: 6.1
