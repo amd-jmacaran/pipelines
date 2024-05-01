@@ -7,7 +7,7 @@ parameters:
   default: 'cmake libgtest-dev libdw-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
 - name: pipModules
   type: string
-  default: 'pyyaml==5.3.1 Cppheaderparser websockets matplotlib lxml barectf'
+  default: 'pyyaml==5.3.1 Cppheaderparser websockets matplotlib lxml barectf pandas'
 
 jobs:
 - job: rocprofiler
