@@ -7,7 +7,7 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'cmake libboost-program-options-dev googletest libfftw3-dev git'
+  default: 'cmake libboost-program-options-dev googletest libfftw3-dev rocsparse git'
 
 jobs:
 - job: hipSPARSE
