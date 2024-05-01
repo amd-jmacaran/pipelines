@@ -16,5 +16,5 @@ pool: HighEnd
 steps:
 - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
   parameters:
-    componentName: release\$(LATEST_RELEASE_TAG)\rocm-cmake
+    componentName: rocm-cmake
     branchName: main
