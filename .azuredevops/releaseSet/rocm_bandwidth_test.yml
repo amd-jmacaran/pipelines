@@ -12,7 +12,7 @@ resources:
     type: github
     endpoint: github.com_amd-jmacaran
     name: amd-jmacaran/rocm_bandwidth_test
-    ref: refs/tags/rocm-${{ variables.last-release }}
+    ref: refs/tags/rocm-${{ variables.LATEST_RELEASE_TAG }}
 
 trigger: none
 

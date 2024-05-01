@@ -11,3 +11,5 @@ variables:
   value: ubuntu-22.04
 - name: HIGH_END_BUILD_POOL
   value: gfx1100
+- name: LATEST_RELEASE_TAG
+  value: rocm-6.1.0
