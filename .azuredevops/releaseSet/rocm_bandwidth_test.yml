@@ -2,6 +2,10 @@ variables:
 - group: common
 - template: /.azuredevops/variables-global.yml@pipelines_repo
 
+parameters:
+  - name: checkoutRef
+    default: refs/tags/${{ variables.LATEST_RELEASE_TAG }}
+
 resources:
   repositories:
   - repository: pipelines_repo
@@ -12,7 +16,7 @@ resources:
     type: github
     endpoint: github.com_amd-jmacaran
     name: amd-jmacaran/rocm_bandwidth_test
-    ref: refs/tags/${{ variables.LATEST_RELEASE_TAG }}
+    ref: ${{ parameters.checkoutRef }}
 
 trigger: none
 
@@ -20,3 +24,4 @@ jobs:
   - template: ${{ variables.CI_COMPONENT_PATH }}/rocm_bandwidth_test.yml@pipelines_repo
     parameters:
       checkoutRepo: release_repo
+      checkoutRef: ${{ parameters.checkoutRef }}
