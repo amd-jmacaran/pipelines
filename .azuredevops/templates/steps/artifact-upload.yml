@@ -29,3 +29,7 @@ steps:
   - task: PublishBuildArtifacts@1
     displayName: '${{ parameters.artifactName }} Publish'
     retryCountOnTaskFailure: 3
+- ${{ if parameters.publish }}:
+  - task: PublishPipelineArtifact@1
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    publishLocation: 'pipeline'

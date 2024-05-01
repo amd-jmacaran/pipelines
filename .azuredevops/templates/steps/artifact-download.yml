@@ -6,6 +6,9 @@ parameters:
 - name: branchName
   type: string
   default: ''
+- name: testFailuresOkay
+  type: boolean
+  default: false
 
 steps:
 - task: DownloadBuildArtifacts@1
@@ -15,6 +18,7 @@ steps:
     project: ROCmPOCm
     pipeline: ${{ parameters.componentName }}
     specificBuildWithTriggering: true
+    allowPartiallySucceededBuilds: ${{ parameters.testFailuresOkay }}
     branchName: ${{ parameters.branchName }}
 - task: ExtractFiles@1
   displayName: Extract ${{ parameters.componentName }}
