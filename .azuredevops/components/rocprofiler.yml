@@ -4,7 +4,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build rocm-llvm-dev libgtest-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
+  default: 'cmake rocm-llvm-dev libgtest-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
 - name: pipModules
   type: string
   default: 'pyyaml==5.3.1 Cppheaderparser websockets matplotlib lxml barectf'
@@ -38,5 +38,4 @@ jobs:
         -DENABLE_LDCONFIG=OFF
         -DUSE_PROF_API=1
         -DGPU_TARGETS="gfx1100"
-        -GNinja
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
