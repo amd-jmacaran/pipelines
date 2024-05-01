@@ -10,7 +10,7 @@ parameters:
   default: 'cmake ninja-build hiprand rocprim-dev libboost-program-options-dev googletest libfftw3-dev git'
 
 jobs:
-- job: rocTHRUST
+- job: rocThrust
   timeoutInMinutes: 180
   variables:
   - group: common
