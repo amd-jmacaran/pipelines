@@ -68,7 +68,7 @@ jobs:
       extraBuildFlags: >-
         -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build"
         -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        -DROCM_DIR="$(Build.BinariesDirectory)"
       cmakeBuildDir: 'amd/device-libs/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
@@ -76,7 +76,7 @@ jobs:
       extraBuildFlags: >-
         -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build;$(Build.SourcesDirectory)/amd/device-libs/build"
         -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        -DROCM_DIR="$(Build.BinariesDirectory)"
       cmakeBuildDir: 'amd/comgr/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
     parameters:
