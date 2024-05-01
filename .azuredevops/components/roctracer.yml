@@ -35,6 +35,7 @@ jobs:
       extraBuildFlags: >-
         -DCMAKE_BUILD_TYPE=release
         -DCMAKE_MODULE_PATH="/opt/rocm/lib/cmake"
+        -DCMAKE_PREFIX_PATH="/opt/rocm"
         -DENABLE_LDCONFIG=OFF
         -DGPU_TARGETS="gfx1100"
         -GNinja
