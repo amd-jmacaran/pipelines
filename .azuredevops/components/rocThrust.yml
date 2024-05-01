@@ -36,12 +36,5 @@ jobs:
         -DCMAKE_BUILD_TYPE=Release
         -DROCM_PATH=/opt/rocm
         -DCMAKE_PREFIX_PATH=/opt/rocm
-        -DCPACK_SET_DESTDIR=OFF
-        -DCPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF
-        -DBUILD_TEST=ON
-        -DBUILD_BENCHMARK=ON
-        -DBUILD_EXAMPLE=ON
-        -DAMDGPU_TARGETS="gfx1100;gfx1101;gfx1102"
-        -DAMDGPU_TESTTARGETS="gfx1100;gfx1101;gfx1102"
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
 
