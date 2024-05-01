@@ -14,7 +14,8 @@ jobs:
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: ${{ variables.LOW_END_BUILD_POOL }}
+  pool: # ${{ variables.LOW_END_BUILD_POOL }}
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   workspace:
     clean: all
   steps:
