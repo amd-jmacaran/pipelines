@@ -7,17 +7,15 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build git'
+  default: 'cmake ninja-build automake unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev clang-5.0 libc++-dev curl'
 
 jobs:
-- job: composable_kernel
-  timeoutInMinutes: 2400
+- job: rdc
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
   pool:
     vmImage: ${{ variables.LOW_END_BUILD_POOL }}
-  # pool: 'Alex Test'
   container:
     image: ${{ variables.DOCKER_IMAGE_NAME }}:${{ variables.LATEST_DOCKER_VERSION }}
   workspace:
@@ -36,7 +34,6 @@ jobs:
         -DCMAKE_CXX_COMPILER=hipcc
         -DCMAKE_BUILD_TYPE=Release
         -DBUILD_CLIENTS=ON
-        -DGPU_TARGETS=gfx1100
         -L
         -GNinja
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
