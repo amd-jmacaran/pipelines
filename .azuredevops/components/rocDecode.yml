@@ -33,7 +33,6 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
-        -DCMAKE_CXX_COMPILER=hipcc
         -DCMAKE_BUILD_TYPE=Release
         -DBUILD_CLIENTS=ON
         -L
