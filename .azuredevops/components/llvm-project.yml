@@ -7,7 +7,7 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'python3-pip libnuma-dev ninja-build ccache'
+  default: 'cmake python3-pip libnuma-dev ninja-build ccache'
 
 jobs:
 - job: llvm_project
