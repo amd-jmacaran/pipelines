@@ -15,8 +15,8 @@ resources:
     name: amd-jmacaran/pipelines
   - repository: release_repo
     type: github
-    endpoint: ROCm
-    name: ROCm/llvm-project
+    endpoint: github.com_amd-jmacaran
+    name: amd-jmacaran/llvm-project
     ref: ${{ parameters.checkoutRef }}
 
 trigger: none
