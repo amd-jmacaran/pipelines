@@ -1,4 +1,10 @@
 parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
 - name: aptPackages
   type: string
   default: 'doxygen doxygen-doc ninja-build python3-sphinx'
@@ -18,6 +24,8 @@ jobs:
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+    parameters:
+      checkoutRepo: ${{ parameters.checkoutRepo }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
 # dependencies are only for testing, so done after compilation
   - ${{ if parameters.aptPackages }}:

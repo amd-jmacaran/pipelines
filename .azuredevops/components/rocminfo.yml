@@ -1,3 +1,11 @@
+parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
+
 jobs:
 - job: rocminfo
   variables:
@@ -10,6 +18,8 @@ jobs:
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+    parameters:
+      checkoutRepo: ${{ parameters.checkoutRepo }}
 # ${{ }} are resolved during compile-time
 # so this next step is skipped completely until
 # we define explicit aptPackages needed to install

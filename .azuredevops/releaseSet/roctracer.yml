@@ -1,3 +1,12 @@
+variables:
+- group: common
+- template: /.azuredevops/variables-global.yml@pipelines_repo
+
+parameters:
+- name: checkoutRef
+  type: string
+  default: refs/tags/$(LATEST_RELEASE_TAG)
+
 resources:
   repositories:
   - repository: pipelines_repo
@@ -8,11 +17,7 @@ resources:
     type: github
     endpoint: github.com_amd-jmacaran
     name: amd-jmacaran/roctracer
-    ref: refs/tags/rocm-6.1.0
-
-variables:
-- group: common
-- template: /.azuredevops/variables-global.yml@pipelines_repo
+    ref: ${{ parameters.checkoutRef }}
 
 trigger: none
 
@@ -20,3 +25,4 @@ jobs:
   - template: ${{ variables.CI_COMPONENT_PATH }}/roctracer.yml@pipelines_repo
     parameters:
       checkoutRepo: release_repo
+      checkoutRef: ${{ parameters.checkoutRef }}

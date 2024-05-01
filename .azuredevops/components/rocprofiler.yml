@@ -2,6 +2,9 @@ parameters:
 - name: checkoutRepo
   type: string
   default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
 - name: aptPackages
   type: string
   default: 'cmake rocm-llvm-dev libgtest-dev libdw-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
@@ -17,7 +20,7 @@ jobs:
   pool:
     vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   container:
-    image: rocm/dev-ubuntu-22.04:6.1
+    image: ${{ variables.DOCKER_IMAGE_NAME }}:${{ variables.LATEST_DOCKER_VERSION }}
   workspace:
     clean: all
   steps:
