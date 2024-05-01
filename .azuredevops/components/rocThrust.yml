@@ -34,7 +34,6 @@ jobs:
       extraBuildFlags: >-
         -GNinja
         -DCMAKE_CXX_COMPILER=hipcc
-        -DCMAKE_BUILD_TYPE=Release
         -DROCM_PATH=/opt/rocm
         -DCMAKE_PREFIX_PATH=/opt/rocm
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
