@@ -9,22 +9,22 @@ parameters:
 
 steps:
 - task: DownloadBuildArtifacts@1
-  displayName: Download ${{parameters.componentName }}
+  displayName: Download ${{ parameters.componentName }}
   inputs:
     buildType: 'specific'
     project: ROCmPOCm
-    pipeline: ${{parameters.componentName }}
+    pipeline: ${{ parameters.componentName }}
     specificBuildWithTriggering: true
-    branchName: ${{parameters.branchName }}
+    branchName: ${{ parameters.branchName }}
 - task: ExtractFiles@1
-  displayName: Extract ${{parameters.componentName }}
+  displayName: Extract ${{ parameters.componentName }}
   inputs:
     archiveFilePatterns: '$(System.ArtifactsDirectory)/**/*.tar.xz'
     destinationFolder: '$(Agent.BuildDirectory)/rocm'
     cleanDestinationFolder: false
     overwriteExistingFiles: true
 - task: DeleteFiles@1
-  displayName: Cleanup Compressed ${{parameters.componentName }}
+  displayName: Cleanup Compressed ${{ parameters.componentName }}
   inputs:
     SourceFolder: '$(System.ArtifactsDirectory)'
     Contents: '/**/*.tar.xz'
