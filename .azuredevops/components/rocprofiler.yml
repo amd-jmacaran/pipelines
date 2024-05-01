@@ -4,7 +4,7 @@ parameters:
   default: 'self'
 - name: aptPackages
   type: string
-  default: 'cmake rocm-llvm-dev libgtest-dev libdw-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
+  default: 'cmake libgtest-dev libdw-dev libsystemd-dev libelf-dev libnuma-dev libpciaccess-dev'
 - name: pipModules
   type: string
   default: 'pyyaml==5.3.1 Cppheaderparser websockets matplotlib lxml barectf'
@@ -30,11 +30,15 @@ jobs:
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
         pipModules: ${{ parameters.pipModules }}
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: llvm-project
+      branchName: amd-staging
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
-        -DCMAKE_MODULE_PATH="$(Build.SourcesDirectory)/cmake_modules;/opt/rocm/lib/cmake"
-        -DCMAKE_PREFIX_PATH="/opt/rocm"
+        -DCMAKE_MODULE_PATH="$(Build.SourcesDirectory)/cmake_modules;$(Agent.BuildDirectory)/rocm/lib/cmake"
+        -DCMAKE_PREFIX_PATH="$(Agent.BuildDirectory)/rocm"
         -DUSE_PROF_API=1
         -DGPU_TARGETS="gfx1100"
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml

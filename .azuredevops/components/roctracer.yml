@@ -30,12 +30,16 @@ jobs:
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
         pipModules: ${{ parameters.pipModules }}
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+    parameters:
+      componentName: llvm-project
+      branchName: amd-staging
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
         -DCMAKE_BUILD_TYPE=release
-        -DCMAKE_MODULE_PATH="/opt/rocm/lib/cmake"
-        -DCMAKE_PREFIX_PATH="/opt/rocm"
+        -DCMAKE_MODULE_PATH="$(Agent.BuildDirectory)/rocm/lib/cmake"
+        -DCMAKE_PREFIX_PATH="$(Agent.BuildDirectory)/rocm/llvm"
         -DENABLE_LDCONFIG=OFF
         -DGPU_TARGETS="gfx1100"
         -GNinja
