@@ -71,7 +71,8 @@ jobs:
     parameters:
       componentName: comgr
       extraBuildFlags: >-
-        -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build;$(Build.SourcesDirectory)/amd/device-libs/build"
+        -DROCM_DIR="$(Build.BinariesDirectory)"
+        -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build;$(Build.SourcesDirectory)/amd/device-libs/build;$(Build.BinariesDirectory)"
         -DCMAKE_BUILD_TYPE=Release
       cmakeBuildDir: 'amd/comgr/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
