@@ -22,7 +22,6 @@ jobs:
     parameters:
       aptPackages: ${{ parameters.aptPackages }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/ccache.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
@@ -36,7 +35,6 @@ jobs:
         -DLLVM_ENABLE_RUNTIMES="compiler-rt;libunwind"
         -DCLANG_ENABLE_AMDCLANG="ON"
         -DLLVM_TARGETS_TO_BUILD="AMDGPU;X86"
-        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
         -GNinja
       cmakeBuildDir: 'llvm/build'
       installDir: '$(Build.BinariesDirectory)/llvm'
@@ -68,7 +66,7 @@ jobs:
       extraBuildFlags: >-
         -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build"
         -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        -DROCM_DIR="$(Build.BinariesDirectory)"
       cmakeBuildDir: 'amd/device-libs/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
@@ -76,7 +74,7 @@ jobs:
       extraBuildFlags: >-
         -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build;$(Build.SourcesDirectory)/amd/device-libs/build"
         -DCMAKE_BUILD_TYPE=Release
-        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        -DROCM_DIR="$(Build.BinariesDirectory)"
       cmakeBuildDir: 'amd/comgr/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
     parameters:
