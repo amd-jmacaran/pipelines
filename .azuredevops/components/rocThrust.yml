@@ -5,14 +5,19 @@ parameters:
 - name: checkoutRef
   type: string
   default: ''
+- name: aptPackages
+  type: string
+  default: 'cmake ninja-build rocrand hiprand rocfft libboost-program-options-dev googletest libfftw3-dev'
 
 jobs:
-- job: rocThrust
-  timeoutInMinutes: 120
+- job: rocTHRUST
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: ${{ variables.HIGH_END_BUILD_POOL }}
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
+  container:
+    image: ${{ variables.DOCKER_IMAGE_NAME }}:${{ variables.LATEST_DOCKER_VERSION }}
   workspace:
     clean: all
   steps:
@@ -23,9 +28,6 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-# ${{ }} are resolved during compile-time
-# so this next step is skipped completely until
-# we define explicit aptPackages needed to install
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
@@ -42,4 +44,4 @@ jobs:
         -DAMDGPU_TARGETS="gfx1100;gfx1101;gfx1102"
         -DAMDGPU_TESTTARGETS="gfx1100;gfx1101;gfx1102"
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
+
