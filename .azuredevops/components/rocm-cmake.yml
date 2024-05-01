@@ -22,17 +22,16 @@ jobs:
   workspace:
     clean: all
   steps:
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
+    parameters:
+      aptPackages: ${{ parameters.aptPackages }}
+      pipModules: ${{ parameters.pipModules }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
 # dependencies are only for testing, so done after compilation
-  - ${{ if parameters.aptPackages }}:
-    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
-      parameters:
-        aptPackages: ${{ parameters.aptPackages }}
-        pipModules: ${{ parameters.pipModules }}
 # extra steps for ctest suite
   - script: |
       python -m pip install -r $(Build.SourcesDirectory)/docs/requirements.txt
