@@ -1,0 +1,13 @@
+variables:
+- group: common
+- template: /.azuredevops/variables-global.yml@pipelines_repo
+
+trigger: none
+
+pool: HighEnd
+
+steps:
+- template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+  parameters:
+    componentName: release\$(LATEST_RELEASE_TAG)\rocm-cmake
+    branchName: main
