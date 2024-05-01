@@ -5,13 +5,19 @@ parameters:
 - name: checkoutRef
   type: string
   default: ''
+- name: aptPackages
+  type: string
+  default: 'cmake libboost-program-options-dev googletest libfftw3-dev'
 
 jobs:
 - job: rccl
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: ${{ variables.HIGH_END_BUILD_POOL }}
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
+  container:
+    image: ${{ variables.DOCKER_IMAGE_NAME }}:${{ variables.LATEST_DOCKER_VERSION }}
   workspace:
     clean: all
   steps:
@@ -27,8 +33,3 @@ jobs:
     parameters:
       scriptExecutable: ./install.sh
       scriptParameters: -d --local_gpu_only -t
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
-    parameters:
-      testDir: build/release/test
-      testExecutable: ./rccl-UnitTests --gtest_output=xml:test_output.xml
-      testParameters: --gtest_output=xml:test_output.xml
