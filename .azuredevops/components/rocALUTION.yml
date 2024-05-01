@@ -1,3 +1,11 @@
+parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
+
 jobs:
 - job: rocALUTION
   variables:
@@ -9,6 +17,8 @@ jobs:
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+    parameters:
+      checkoutRepo: ${{ parameters.checkoutRepo }}
   - ${{ if parameters.aptPackages }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
       parameters:

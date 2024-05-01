@@ -15,14 +15,14 @@ resources:
     name: amd-jmacaran/pipelines
   - repository: release_repo
     type: github
-    endpoint: github.com_alexxu-amd
-    name: alexxu-amd/hipTensor
+    endpoint: github.com_amd-jmacaran
+    name: amd-jmacaran/llvm-project
     ref: ${{ parameters.checkoutRef }}
 
 trigger: none
 
 jobs:
-  - template: ${{ variables.CI_COMPONENT_PATH }}/hipTensor.yml@pipelines_repo
+  - template: ${{ variables.CI_COMPONENT_PATH }}/llvm-project.yml@pipelines_repo
     parameters:
       checkoutRepo: release_repo
       checkoutRef: ${{ parameters.checkoutRef }}

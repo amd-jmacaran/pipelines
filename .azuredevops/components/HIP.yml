@@ -1,4 +1,10 @@
 parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
 - name: aptPackages
   type: string
   default: 'libnuma-dev mesa-common-dev'
@@ -21,6 +27,8 @@ jobs:
   steps:
 # checkout triggering repo (either HIP or clr)
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+    parameters:
+      checkoutRepo: ${{ parameters.checkoutRepo }}
 # if this is triggered by HIP repo, matching repo is clr
 # if this is triggered by clr repo, matching repo is HIP
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml

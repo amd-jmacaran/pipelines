@@ -2,12 +2,15 @@ parameters:
 - name: checkoutRepo
   type: string
   default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
 - name: aptPackages
   type: string
   default: 'cmake ninja-build libnuma-dev'
 
 jobs:
-- job: hipify
+- job: HIPIFY
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml

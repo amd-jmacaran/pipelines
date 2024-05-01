@@ -2,18 +2,21 @@ parameters:
 - name: checkoutRepo
   type: string
   default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
 - name: aptPackages
   type: string
   default: 'cmake ninja-build rocrand hiprand libboost-program-options-dev libgtest-dev libfftw3-dev'
 
 jobs:
-- job: rocfft
+- job: rocFFT
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: gfx1100
+  pool: ${{ variables.HIGH_END_BUILD_POOL }}
   container:
-    image: rocm/dev-ubuntu-22.04:6.1
+    image: ${{ variables.DOCKER_IMAGE_NAME }}:${{ variables.LATEST_DOCKER_VERSION }}
   workspace:
     clean: all
   steps:

@@ -1,3 +1,11 @@
+parameters:
+- name: checkoutRepo
+  type: string
+  default: 'self'
+- name: checkoutRef
+  type: string
+  default: ''
+
 jobs:
 - job: rocThrust
   timeoutInMinutes: 120
@@ -10,6 +18,8 @@ jobs:
   steps:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
+    parameters:
+      checkoutRepo: ${{ parameters.checkoutRepo }}
 # ${{ }} are resolved during compile-time
 # so this next step is skipped completely until
 # we define explicit aptPackages needed to install
@@ -18,7 +28,7 @@ jobs:
       parameters:
         aptPackages: ${{ parameters.aptPackages }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
-    parameters:        
+    parameters:
       extraBuildFlags: >-
         -GNinja
         -DCMAKE_CXX_COMPILER=hipcc
@@ -28,7 +38,7 @@ jobs:
         -DCPACK_SET_DESTDIR=OFF
         -DCPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF
         -DBUILD_TEST=ON
-        -DBUILD_BENCHMARK=ON 
+        -DBUILD_BENCHMARK=ON
         -DBUILD_EXAMPLE=ON
         -DAMDGPU_TARGETS="gfx1100;gfx1101;gfx1102"
         -DAMDGPU_TESTTARGETS="gfx1100;gfx1101;gfx1102"
