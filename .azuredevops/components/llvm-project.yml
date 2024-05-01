@@ -14,6 +14,8 @@ jobs:
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
+  - name: HIP_DEVICE_LIB_PATH
+    value: '$(Build.BinariesDirectory)/amdgcn/bitcode'
   pool: ${{ variables.CLOUD_BUILD_POOL }}
   workspace:
     clean: all
@@ -71,8 +73,7 @@ jobs:
     parameters:
       componentName: comgr
       extraBuildFlags: >-
-        -DROCM_DIR="$(Build.BinariesDirectory)"
-        -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build;$(Build.SourcesDirectory)/amd/device-libs/build;$(Build.BinariesDirectory)"
+        -DCMAKE_PREFIX_PATH="$(Build.SourcesDirectory)/llvm/build;$(Build.SourcesDirectory)/amd/device-libs/build"
         -DCMAKE_BUILD_TYPE=Release
       cmakeBuildDir: 'amd/comgr/build'
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
