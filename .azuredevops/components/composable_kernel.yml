@@ -33,6 +33,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=hipcc
         -DCMAKE_BUILD_TYPE=Release
         -DBUILD_CLIENTS=ON
+        -DGPU_TARGETS=gfx1100
         -L
         -GNinja
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
