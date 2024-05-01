@@ -20,13 +20,6 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-# ${{ }} are resolved during compile-time
-# so this next step is skipped completely until
-# we define explicit aptPackages needed to install
-  - ${{ if parameters.aptPackages }}:
-    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
-      parameters:
-        aptPackages: ${{ parameters.aptPackages }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-
