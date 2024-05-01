@@ -7,7 +7,7 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'libnuma-dev ninja-build ccache'
+  default: 'python3-pip libnuma-dev ninja-build ccache'
 
 jobs:
 - job: llvm_project
@@ -18,18 +18,14 @@ jobs:
   workspace:
     clean: all
   steps:
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
+    parameters:
+      aptPackages: ${{ parameters.aptPackages }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/ccache.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-# ${{ }} are resolved during compile-time
-# so this next step is skipped completely until
-# we define explicit aptPackages needed to install
-  - ${{ if parameters.aptPackages }}:
-    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/dependencies.yml
-      parameters:
-        aptPackages: ${{ parameters.aptPackages }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       componentName: rocm-llvm
