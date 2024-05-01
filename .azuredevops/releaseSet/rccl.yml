@@ -1,0 +1,28 @@
+variables:
+- group: common
+- template: /.azuredevops/variables-global.yml@pipelines_repo
+
+parameters:
+- name: checkoutRef
+  type: string
+  default: refs/tags/$(LATEST_RELEASE_TAG)
+
+resources:
+  repositories:
+  - repository: pipelines_repo
+    type: github
+    endpoint: github.com_amd-jmacaran
+    name: amd-jmacaran/pipelines
+  - repository: release_repo
+    type: github
+    endpoint: github.com_abhimeda
+    name: abhimeda/rccl
+    ref: release/rocm-rel-6.1
+
+trigger: none
+
+jobs:
+  - template: ${{ variables.CI_COMPONENT_PATH }}/rccl.yml@pipelines_repo
+    parameters:
+      checkoutRepo: release_repo
+      checkoutRef: ${{ parameters.checkoutRef }}
