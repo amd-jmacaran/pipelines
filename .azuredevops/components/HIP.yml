@@ -44,22 +44,66 @@ jobs:
         pipModules: ${{ parameters.pipModules }}
 # download tasks has built in 4x retry download count
 # these will download last passing build for that branch
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
-    parameters:
-      componentName: llvm-project
-      branchName: amd-staging
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
-    parameters:
-      componentName: ROCT-Thunk-Interface
-      branchName: master
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
-    parameters:
-      componentName: ROCR-Runtime
-      branchName: master
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
-    parameters:
-      componentName: rocprofiler-register
-      branchName: amd-mainline
+# CI case: download latest default branch build
+  - ${{ if eq(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: llvm-project
+        branchName: amd-staging
+        pipelineId: $(llvm-project-pipeline-id)
+        testFailuresOkay: true
+# manual build case: triggered by ROCm/ROCm repo
+  - ${{ if ne(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: \release\$(LATEST_RELEASE_TAG)\llvm-project
+        pipelineId: $(llvm-project-tagged-pipeline-id)
+        testFailuresOkay: true
+# CI case: download latest default branch build
+  - ${{ if eq(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: ROCT-Thunk-Interface
+        branchName: master
+        pipelineId: $(roct-thunk-interface-pipeline-id)
+        testFailuresOkay: true
+# manual build case: triggered by ROCm/ROCm repo
+  - ${{ if ne(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: \release\$(LATEST_RELEASE_TAG)\ROCT-Thunk-Interface
+        pipelineId: $(roct-thunk-interface-tagged-pipeline-id)
+        testFailuresOkay: true
+# CI case: download latest default branch build
+  - ${{ if eq(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: ROCR-Runtime
+        branchName: master
+        pipelineId: $(rocr-runtime-pipeline-id)
+        testFailuresOkay: true
+# manual build case: triggered by ROCm/ROCm repo
+  - ${{ if ne(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: \release\$(LATEST_RELEASE_TAG)\ROCR-Runtime
+        pipelineId: $(rocr-runtime-tagged-pipeline-id)
+        testFailuresOkay: true
+# CI case: download latest default branch build
+  - ${{ if eq(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: rocprofiler-register
+        branchName: amd-mainline
+        pipelineId: $(rocprofiler-register-pipeline-id)
+        testFailuresOkay: true
+# manual build case: triggered by ROCm/ROCm repo
+  - ${{ if ne(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: \release\$(LATEST_RELEASE_TAG)\rocprofiler-register
+        pipelineId: $(rocprofiler-register-tagged-pipeline-id)
+        testFailuresOkay: true
   - script: 'ls -1R $(Agent.BuildDirectory)/rocm'
     displayName: 'Artifact listing'
 # compile clr

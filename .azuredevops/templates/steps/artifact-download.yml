@@ -8,7 +8,7 @@ parameters:
   default: ''
 - name: branchName
   type: string
-  default: ''
+  default: 'main' # for tagged builds
 - name: testFailuresOkay
   type: boolean
   default: false

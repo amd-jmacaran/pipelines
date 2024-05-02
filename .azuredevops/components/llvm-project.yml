@@ -28,7 +28,7 @@ jobs:
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
 # CI case: download latest default rocm-cmake build
-  - ${{ if eq( parameters.checkoutRef, '') }}:
+  - ${{ if eq(parameters.checkoutRef, '') }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
       parameters:
         componentName: rocm-cmake
@@ -36,11 +36,10 @@ jobs:
         pipelineId: $(rocm-cmake-pipeline-id)
         testFailuresOkay: true
 # manual build case: triggered by ROCm/ROCm repo
-  - ${{ if ne( parameters.checkoutRef, '') }}:
+  - ${{ if ne(parameters.checkoutRef, '') }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
       parameters:
         componentName: \release\$(LATEST_RELEASE_TAG)\rocm-cmake
-        branchName: main
         pipelineId: $(rocm-cmake-tagged-pipeline-id)
         testFailuresOkay: true
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml

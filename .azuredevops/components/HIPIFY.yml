@@ -26,10 +26,21 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
-    parameters:
-      componentName: llvm-project
-      branchName: amd-staging
+# CI case: download latest default branch build
+  - ${{ if eq(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: llvm-project
+        branchName: amd-staging
+        pipelineId: $(llvm-project-pipeline-id)
+        testFailuresOkay: true
+# manual build case: triggered by ROCm/ROCm repo
+  - ${{ if ne(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: \release\$(LATEST_RELEASE_TAG)\llvm-project
+        pipelineId: $(llvm-project-tagged-pipeline-id)
+        testFailuresOkay: true
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       extraBuildFlags: >-

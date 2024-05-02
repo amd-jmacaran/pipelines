@@ -29,10 +29,10 @@ steps:
     displayName: 'sudo apt-get install ...'
     inputs:
       targetType: inline
-      script: sudo apt-get --yes install ${{ parameters.aptPackages }}
+      script: sudo apt-get --yes install ${{ join(' ', parameters.aptPackages) }}
 - ${{ if parameters.pipModules }}:
   - task: Bash@3
     displayName: 'pip install  ...'
     inputs:
       targetType: inline
-      script: pip install ${{ parameters.pipModules }}
+      script: pip install ${{ join(' ', parameters.pipModules) }}
