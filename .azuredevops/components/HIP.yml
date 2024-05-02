@@ -6,12 +6,12 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
+  type: object
   default:
     - libnuma-dev
     - mesa-common-dev
 - name: pipModules
-  type: string
+  type: object
   default:
     - CppHeaderParser
 

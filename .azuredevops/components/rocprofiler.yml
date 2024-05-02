@@ -6,7 +6,7 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
+  type: object
   default:
     - cmake
     - libgtest-dev
@@ -16,7 +16,7 @@ parameters:
     - libnuma-dev
     - libpciaccess-dev
 - name: pipModules
-  type: string
+  type: object
   default:
     - pyyaml==5.3.1
     - Cppheaderparser

@@ -6,7 +6,7 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
+  type: object
   default:
     - libnuma-dev
     - libdrm-dev
