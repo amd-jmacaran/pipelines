@@ -2,11 +2,11 @@ parameters:
 # space-delimited list of packages to install via apt-get install command
 # TODO convert to string array and split with spaces
 - name: aptPackages
-  type: string
-  default: ''
+  type: object
+  default: []
 - name: pipModules
-  type: string
-  default: ''
+  type: object
+  default: []
 
 steps:
 - task: Bash@3
