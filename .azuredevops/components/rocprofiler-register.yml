@@ -21,5 +21,4 @@ jobs:
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/test.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml

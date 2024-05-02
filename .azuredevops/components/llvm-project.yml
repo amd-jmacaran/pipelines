@@ -7,7 +7,12 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'cmake python3-pip libnuma-dev ninja-build ccache'
+  default:
+    - cmake
+    - python3-pip
+    - libnuma-dev
+    - ninja-build
+    - ccache
 
 jobs:
 - job: llvm_project
@@ -27,7 +32,7 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-# CI case: download latest default rocm-cmake build
+# CI case: download latest default branch build
   - ${{ if eq(parameters.checkoutRef, '') }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
       parameters:

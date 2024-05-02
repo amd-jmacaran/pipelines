@@ -7,10 +7,16 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'doxygen doxygen-doc ninja-build python3-sphinx'
+  default:
+    - doxygen
+    - doxygen-doc
+    - ninja-build
+    - python3-sphinx
 - name: pipModules
   type: string
-  default: 'cget ninja'
+  default:
+    - cget
+    - ninja
 
 jobs:
 - job: rocm_cmake

@@ -7,11 +7,15 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build rocblas libgtest-dev git'
+  default:
+    - cmake
+    - ninja-build
+    - rocblas
+    - libgtest-dev
+    - git
 
 jobs:
 - job: rocWMMA
-  timeoutInMinutes: 180
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml

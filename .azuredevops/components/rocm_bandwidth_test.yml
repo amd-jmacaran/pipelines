@@ -7,10 +7,14 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build'
+  default:
+    - cmake
+    - ninja-build
 - name: pipModules
   type: string
-  default: 'CppHeaderParser argparse'
+  default:
+    - CppHeaderParser
+    - argparse
 
 jobs:
 - job: rocm_bandwidth_test

@@ -7,11 +7,18 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build hiprand rocprim-dev libboost-program-options-dev googletest libfftw3-dev git'
+  default:
+    - cmake
+    - ninja-build
+    - hiprand
+    - rocprim-dev
+    - libboost-program-options-dev
+    - googletest
+    - libfftw3-dev
+    - git
 
 jobs:
 - job: rocThrust
-  timeoutInMinutes: 180
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml

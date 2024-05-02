@@ -7,7 +7,11 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'cmake ninja-build libelf-dev libdw-dev'
+  default:
+    - cmake
+    - ninja-build
+    - libelf-dev
+    - libdw-dev
 
 jobs:
 - job: rocr_debug_agent

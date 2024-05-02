@@ -7,7 +7,9 @@ parameters:
   default: ''
 - name: aptPackages
   type: string
-  default: 'libnuma-dev libdrm-dev'
+  default:
+    - libnuma-dev
+    - libdrm-dev
 
 jobs:
 - job: ROCT_Thunk_Interface
@@ -26,8 +28,5 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-# ${{ }} are resolved during compile-time
-# so this next step is skipped completely until
-# we define explicit aptPackages needed to install
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-upload.yml
