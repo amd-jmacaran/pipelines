@@ -33,12 +33,14 @@ jobs:
       parameters:
         componentName: rocm-cmake
         branchName: develop
+        pipelineId: $(rocm-cmake-pipeline-id)
 # manual build case: triggered by ROCm/ROCm repo
   - ${{ if ne( parameters.checkoutRef, '') }}:
     - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
       parameters:
         componentName: \release\$(LATEST_RELEASE_TAG)\rocm-cmake
         branchName: main
+        pipelineId: $(rocm-cmake-tagged-pipeline-id)
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       componentName: rocm-llvm

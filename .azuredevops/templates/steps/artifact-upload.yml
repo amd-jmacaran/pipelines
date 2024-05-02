@@ -26,13 +26,8 @@ steps:
     RemoveDotFiles: true
 # then publish it
 - ${{ if parameters.publish }}:
-  - task: PublishBuildArtifacts@1
-    displayName: '${{ parameters.artifactName }} Publish'
-    retryCountOnTaskFailure: 3
-- ${{ if parameters.publish }}:
   - task: PublishPipelineArtifact@1
     displayName: '${{ parameters.artifactName }} Publish'
     retryCountOnTaskFailure: 3
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)'
-      publishLocation: 'pipeline'

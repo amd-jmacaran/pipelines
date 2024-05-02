@@ -3,6 +3,9 @@ parameters:
 - name: componentName
   type: string
   default: ''
+- name: pipelineId
+  type: string
+  default: ''
 - name: branchName
   type: string
   default: ''
@@ -11,15 +14,16 @@ parameters:
   default: false
 
 steps:
-- task: DownloadBuildArtifacts@1
+- task: DownloadPipelineArtifact@2
   displayName: Download ${{ parameters.componentName }}
   inputs:
     buildType: 'specific'
     project: ROCmPOCm
-    pipeline: ${{ parameters.componentName }}
+    pipeline: ${{ parameters.pipelineId }}
     specificBuildWithTriggering: true
     allowPartiallySucceededBuilds: ${{ parameters.testFailuresOkay }}
     branchName: ${{ parameters.branchName }}
+    targetPath: '$(System.ArtifactsDirectory)'
 - task: ExtractFiles@1
   displayName: Extract ${{ parameters.componentName }}
   inputs:
