@@ -24,6 +24,7 @@ parameters:
     - matplotlib
     - lxml
     - barectf
+    - pandas
 
 jobs:
 - job: rocprofiler
