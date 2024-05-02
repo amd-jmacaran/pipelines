@@ -24,13 +24,13 @@ steps:
   inputs:
     targetType: inline
     script: sudo apt --yes --fix-broken install
-- ${{ if parameters.aptPackages }}:
+- ${{ if gt(length(parameters.aptPackages), 0) }}:
   - task: Bash@3
     displayName: 'sudo apt-get install ...'
     inputs:
       targetType: inline
       script: sudo apt-get --yes install ${{ join(' ', parameters.aptPackages) }}
-- ${{ if parameters.pipModules }}:
+- ${{ if gt(length(parameters.pipModules), 0) }}:
   - task: Bash@3
     displayName: 'pip install  ...'
     inputs:
