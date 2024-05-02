@@ -1,0 +1,20 @@
+resources:
+  repositories:
+  - repository: pipelines_repo
+    type: github
+    endpoint: github.com_amd-jmacaran
+    name: amd-jmacaran/pipelines
+    
+variables:
+- group: common
+- template: /.azuredevops/variables-global.yml@pipelines_repo
+
+trigger: none
+
+pool: HighEnd
+
+steps:
+- template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+  parameters:
+    componentName: rocm-cmake
+    branchName: main

@@ -6,8 +6,13 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake libboost-program-options-dev googletest libfftw3-dev git'
+  type: object
+  default:
+    - cmake
+    - libboost-program-options-dev
+    - googletest
+    - libfftw3-dev
+    - git
 
 jobs:
 - job: rccl

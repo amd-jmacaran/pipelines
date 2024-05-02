@@ -6,8 +6,20 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake ninja-build automake unzip build-essential autoconf libtool pkg-config libgflags-dev libgtest-dev libc++-dev curl'
+  type: object
+  default:
+    - cmake
+    - ninja-build
+    - automake
+    - unzip
+    - build-essential
+    - autoconf
+    - libtool
+    - pkg-config
+    - libgflags-dev
+    - libgtest-dev
+    - libc++-dev
+    - curl
 
 jobs:
 - job: rdc

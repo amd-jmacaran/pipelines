@@ -9,13 +9,13 @@ parameters:
   type: object
   default:
     - cmake
-    - ninja-build
-    - rocblas
-    - libgtest-dev
+    - libboost-program-options-dev
+    - googletest
+    - libfftw3-dev
     - git
 
 jobs:
-- job: rocWMMA
+- job: rccl
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
@@ -33,11 +33,7 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
+  - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-script.yml
     parameters:
-      extraBuildFlags: >-
-        -DCMAKE_CXX_COMPILER=hipcc
-        -DCMAKE_BUILD_TYPE=Release
-        -DROCM_PATH=/opt/rocm
-        -DCMAKE_PREFIX_PATH=/opt/rocm
-        -GNinja
+      scriptExecutable: ./install.sh
+      scriptParameters: -i

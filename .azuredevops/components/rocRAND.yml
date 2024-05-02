@@ -6,8 +6,9 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'ninja-build'
+  type: object
+  default:
+    - ninja-build
 
 jobs:
 - job: rocRAND
@@ -27,9 +28,6 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
-# ${{ }} are resolved during compile-time
-# so this next step is skipped completely until
-# we define explicit aptPackages needed to install
 #  - script: sudo dpkg -L libhsa-runtime64-1
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
     parameters:

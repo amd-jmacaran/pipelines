@@ -6,8 +6,11 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake ninja-build git'
+  type: object
+  default:
+    - cmake
+    - ninja-build
+    - git
 
 jobs:
 - job: composable_kernel

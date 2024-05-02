@@ -6,8 +6,15 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake ninja-build rocrand hiprand libboost-program-options-dev libgtest-dev libfftw3-dev'
+  type: object
+  default:
+    - cmake
+    - ninja-build
+    - rocrand
+    - hiprand
+    - libboost-program-options-dev
+    - libgtest-dev
+    - libfftw3-dev
 
 jobs:
 - job: rocFFT

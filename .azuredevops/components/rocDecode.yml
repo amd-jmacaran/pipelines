@@ -6,17 +6,25 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake ninja-build pkg-config ffmpeg libavcodec-dev libavformat-dev libavutil-dev libstdc++-12-dev mesa-amdgpu-multimedia-devel'
+  type: object
+  default:
+    - cmake
+    - ninja-build
+    - pkg-config
+    - ffmpeg
+    - libavcodec-dev
+    - libavformat-dev
+    - libavutil-dev
+    - libstdc++-12-dev
+    - mesa-amdgpu-multimedia-devel
 
 jobs:
 - job: rocDecode
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  pool: "Alex Test"
-  # pool:
-  #   vmImage: ${{ variables.LOW_END_BUILD_POOL }}
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   container:
     image: ${{ variables.DOCKER_IMAGE_NAME }}:${{ variables.LATEST_DOCKER_VERSION }}
   workspace:

@@ -6,8 +6,11 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake ninja-build composable_kernel'
+  type: object
+  default:
+    - cmake
+    - ninja-build
+    - composable_kernel
 
 jobs:
 - job: hipTensor

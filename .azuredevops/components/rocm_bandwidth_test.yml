@@ -6,11 +6,15 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake ninja-build'
+  type: object
+  default:
+    - cmake
+    - ninja-build
 - name: pipModules
-  type: string
-  default: 'CppHeaderParser argparse'
+  type: object
+  default:
+    - CppHeaderParser
+    - argparse
 
 jobs:
 - job: rocm_bandwidth_test

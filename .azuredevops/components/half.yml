@@ -6,17 +6,18 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake ninja-build'
+  type: object
+  default:
+    - cmake
+    - ninja-build
 
 jobs:
 - job: half
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
-  # pool:
-  #   vmImage: ${{ variables.LOW_END_BUILD_POOL }}
-  pool: 'Alex Test'
+  pool:
+    vmImage: ${{ variables.LOW_END_BUILD_POOL }}
   container:
     image: ${{ variables.DOCKER_IMAGE_NAME }}:${{ variables.LATEST_DOCKER_VERSION }}
   workspace:

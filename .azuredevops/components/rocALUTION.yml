@@ -6,8 +6,14 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake libboost-program-options-dev libgtest-dev libfftw3-dev git mpich'
+  type: object
+  default:
+    - cmake
+    - libboost-program-options-dev
+    - libgtest-dev
+    - libfftw3-dev
+    - git
+    - mpich
 
 jobs:
 - job: rocALUTION

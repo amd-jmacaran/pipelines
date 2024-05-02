@@ -6,8 +6,13 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake python3-pip rocm-cmake libnuma-dev ninja-build ccache'
+  type: object
+  default:
+    - cmake
+    - python3-pip
+    - libnuma-dev
+    - ninja-build
+    - ccache
 
 jobs:
 - job: llvm_project
@@ -16,7 +21,7 @@ jobs:
   - template: /.azuredevops/variables-global.yml
   - name: HIP_DEVICE_LIB_PATH
     value: '$(Build.BinariesDirectory)/amdgcn/bitcode'
-  pool: ${{ variables.CLOUD_BUILD_POOL }}
+  pool: HighEnd
   workspace:
     clean: all
   steps:
@@ -27,6 +32,21 @@ jobs:
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
+# CI case: download latest default branch build
+  - ${{ if eq(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: rocm-cmake
+        branchName: develop
+        pipelineId: $(rocm-cmake-pipeline-id)
+        testFailuresOkay: true
+# manual build case: triggered by ROCm/ROCm repo
+  - ${{ if ne(parameters.checkoutRef, '') }}:
+    - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/artifact-download.yml
+      parameters:
+        componentName: \release\$(LATEST_RELEASE_TAG)\rocm-cmake
+        pipelineId: $(rocm-cmake-tagged-pipeline-id)
+        testFailuresOkay: true
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/build-cmake.yml
     parameters:
       componentName: rocm-llvm

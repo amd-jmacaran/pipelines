@@ -6,8 +6,10 @@ parameters:
   type: string
   default: ''
 - name: aptPackages
-  type: string
-  default: 'cmake ninja-build'
+  type: object
+  default:
+    - cmake
+    - ninja-build
 
 jobs:
 - job: MIVisionX
