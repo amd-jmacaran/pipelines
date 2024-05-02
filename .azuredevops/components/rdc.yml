@@ -25,6 +25,24 @@ jobs:
     parameters:
       aptPackages: ${{ parameters.aptPackages }}
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/preamble.yml
+  - task: Bash@3
+    displayName: 'git clone 3rd party source'
+    inputs:
+      targetType: inline
+      script: 'git clone -b v1.61.0 https://github.com/grpc/grpc --depth=1 --shallow-submodules --recurse-submodules'
+      workingDirectory: $(Build.SourcesDirectory)
+  - task: CMake@1
+  displayName: '3rd party source CMake Flags'
+  inputs:
+    workingDirectory: '$(Build.SourcesDirectory)/grpc'
+    cmakeArgs: >-
+    -B build
+    -DgRPC_INSTALL=ON
+    -DgRPC_BUILD_TESTS=OFF
+    -DBUILD_SHARED_LIBS=ON
+    -DCMAKE_INSTALL_PREFIX="$GRPC_ROOT"
+    -DCMAKE_INSTALL_LIBDIR=lib
+    -DCMAKE_BUILD_TYPE=Release
   - template: ${{ variables.CI_TEMPLATE_PATH }}/steps/checkout.yml
     parameters:
       checkoutRepo: ${{ parameters.checkoutRepo }}
