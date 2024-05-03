@@ -19,7 +19,7 @@ parameters:
     - mesa-amdgpu-multimedia-devel
 
 jobs:
-- job: rocDecode1
+- job: rocDecode
   variables:
   - group: common
   - template: /.azuredevops/variables-global.yml
